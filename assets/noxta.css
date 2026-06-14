@@ -154,7 +154,7 @@ h2.sec-title{font-family:var(--font-d);font-size:clamp(2.6rem,7vw,6rem);line-hei
 .work-case.flip{grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr)}  /* mirror cols so the shot keeps the wider column → same size both cards */
 .work-case.flip .work-info{order:2}
 @media (max-width:900px){.work-case,.work-case.flip{grid-template-columns:1fr}.work-case.flip .work-info{order:0}}
-html.lite .work-case,html.lite .work-case.flip{grid-template-columns:1fr}html.lite .work-case.flip .work-info{order:0}
+/* lite keeps the 2-column case rows (info | shot), just stacked vertically — not full-width single column */
 
 /* ---------- inner-page hero (contact / portfolio / etc.) ---------- */
 .page-hero{position:relative;z-index:2;padding:clamp(8.5rem,21vh,15rem) 4vw 7vh;overflow:hidden}
