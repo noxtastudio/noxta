@@ -99,7 +99,7 @@ if(typeof gsap === "undefined"){
     const dot = document.getElementById("curDot");
     const pos = {x: innerWidth/2, y: innerHeight/2};
     addEventListener("pointermove", e => { pos.x = e.clientX; pos.y = e.clientY; }, {passive:true});
-    const N = 6, trail = [];
+    const N = 3, trail = [];
     for(let i=0;i<N;i++){
       const d = document.createElement("div"); d.className = "cur-trail";
       const s = Math.max(5 - i*0.7, 1.5);
