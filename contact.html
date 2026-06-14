@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact · Noxta Studio — Adrian Tajti, freelance web designer in Tilburg</title>
+<meta name="description" content="Tell me about your project. I read every message and reply within 24 hours — usually faster. Email, WhatsApp, or the form below.">
+<link rel="canonical" href="https://noxta.studio/contact">
+<!-- Favicons / app icons -->
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
+<link rel="shortcut icon" href="assets/favicon.ico">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<!-- Open Graph / social -->
+<meta property="og:title" content="Contact · Noxta Studio">
+<meta property="og:description" content="Tell me about your project. One person, full stack — I reply within 24 hours.">
+<meta property="og:image" content="https://noxta.studio/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://noxta.studio/contact">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Noxta Studio">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Contact · Noxta Studio">
+<meta name="twitter:description" content="Tell me about your project. I reply within 24 hours.">
+<meta name="twitter:image" content="https://noxta.studio/og-image.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&family=Newsreader:ital,opsz,wght@1,6..72,200..500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/noxta.css">
+<style>
+/* ---------- contact grid ---------- */
+.contact-grid{position:relative;z-index:2;display:grid;grid-template-columns:.82fr 1.18fr;gap:4vw;align-items:start;padding-top:0}
+@media (max-width:920px){.contact-grid{grid-template-columns:1fr;gap:3.4rem}}
+.col-label{margin-bottom:1.8rem}
+
+/* ---------- direct column ---------- */
+.fact-list{display:flex;flex-direction:column}
+.fact{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;padding:1.25rem 0;text-decoration:none;transition:padding-left .35s var(--ease)}
+a.fact:hover{padding-left:.7rem}
+.fact .k{font-family:var(--font-m);font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3)}
+.fact .v{font-family:var(--font-d);font-weight:600;font-size:clamp(.98rem,1.25vw,1.12rem);letter-spacing:.02em;text-align:right;color:var(--ink);transition:color .3s}
+a.fact:hover .v{color:var(--ember-2)}
+.direct-note{margin-top:2rem;font-family:var(--font-s);font-style:italic;font-weight:300;color:var(--ember-3);font-size:1.15rem;line-height:1.5}
+
+/* ---------- form ---------- */
+.form-wrap{position:relative;background:var(--bg-2);border:1px solid var(--line);clip-path:polygon(0 0,100% 0,100% calc(100% - 22px),calc(100% - 22px) 100%,0 100%);padding:clamp(1.8rem,3vw,2.8rem)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.3rem}
+.field{display:flex;flex-direction:column;gap:.55rem}
+.field.full{grid-column:1/-1}
+.field label{font-family:var(--font-m);font-size:.66rem;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3)}
+.field label .opt{opacity:.55}
+.field input,.field select,.field textarea{font-family:var(--font-b);font-size:.98rem;color:var(--ink);background:var(--bg-3);border:1px solid var(--line-2);padding:.85rem 1rem;width:100%;border-radius:0;-webkit-appearance:none;appearance:none;transition:border-color .3s,background .3s}
+.field textarea{min-height:8rem;resize:vertical;line-height:1.6}
+.field input::placeholder,.field textarea::placeholder{color:var(--ink-3)}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--ember);background:#1d1a17}
+/* kill the browser autofill yellow — paint over it with the field bg */
+.field input:-webkit-autofill,.field input:-webkit-autofill:hover,.field input:-webkit-autofill:focus,.field textarea:-webkit-autofill,.field select:-webkit-autofill{-webkit-text-fill-color:var(--ink);-webkit-box-shadow:0 0 0 1000px var(--bg-3) inset;box-shadow:0 0 0 1000px var(--bg-3) inset;caret-color:var(--ink);transition:background-color 9999s ease-out 0s}
+.field input:-webkit-autofill:focus,.field textarea:-webkit-autofill:focus{-webkit-box-shadow:0 0 0 1000px #1d1a17 inset;box-shadow:0 0 0 1000px #1d1a17 inset}
+.field input:autofill,.field textarea:autofill{-webkit-text-fill-color:var(--ink);box-shadow:0 0 0 1000px var(--bg-3) inset}
+.field select{cursor:none;color:var(--ink);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23ff7a3d' stroke-width='1.6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 1rem center;padding-right:2.4rem}
+.field select option{background:var(--bg-2);color:var(--ink)}
+@media (hover:none),(max-width:900px){.field select{cursor:pointer}}
+/* segmented option buttons (project type / budget / timeline) */
+.optgrid{display:flex;flex-wrap:wrap;gap:.55rem}
+.opt-btn{font-family:var(--font-m);font-size:.72rem;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-2);background:var(--bg-3);border:0;box-shadow:inset 0 0 0 1px var(--line-2);border-radius:0;clip-path:polygon(0 0,100% 0,100% calc(100% - 9px),calc(100% - 9px) 100%,0 100%);padding:.85rem 1.1rem;line-height:1;-webkit-appearance:none;appearance:none;transition:color .25s,background .25s,box-shadow .25s}
+.opt-btn:hover{color:var(--ink);box-shadow:inset 0 0 0 1px var(--ember-3)}
+.opt-btn.is-active{background:var(--grad);color:#0a0908;box-shadow:none;font-weight:600}
+.form-actions{display:flex;align-items:center;gap:1.6rem;flex-wrap:wrap;margin-top:1.9rem}
+.form-note{font-family:var(--font-m);font-size:.63rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.hp{position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;opacity:0;pointer-events:none}
+.btn[disabled]{opacity:.6;pointer-events:none}
+@media (max-width:560px){.form-grid{grid-template-columns:1fr}}
+
+/* ---------- success ---------- */
+.form-success{position:relative;background:linear-gradient(180deg,rgba(255,77,21,.07),rgba(17,16,16,1) 42%);border:1px solid rgba(255,77,21,.4);clip-path:polygon(0 0,100% 0,100% calc(100% - 22px),calc(100% - 22px) 100%,0 100%);padding:clamp(2rem,3.4vw,3rem)}
+.form-success h2{font-family:var(--font-d);font-weight:700;text-transform:uppercase;font-size:clamp(2rem,5vw,3.4rem);line-height:.96;letter-spacing:-.01em}
+.form-success .lede{color:var(--ink-2);line-height:1.7;margin:1.4rem 0 2rem;max-width:46ch}
+.form-success .srow{display:flex;justify-content:space-between;gap:1rem;padding:1rem 0;border-top:1px solid var(--line)}
+.form-success .srow .k{font-family:var(--font-m);font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.form-success .srow .v{font-family:var(--font-d);font-weight:600;letter-spacing:.02em;text-align:right}
+
+/* ---------- faq ---------- */
+.faq-list{max-width:62rem}
+.faq-item{}
+.faq-item summary{list-style:none;cursor:none;display:flex;justify-content:space-between;align-items:center;gap:1.4rem;padding:1.7rem 0;font-family:var(--font-d);font-weight:600;font-size:clamp(1.1rem,2.4vw,1.6rem);text-transform:uppercase;letter-spacing:-.01em}
+.faq-item summary::-webkit-details-marker{display:none}
+.faq-item summary .ic{flex:none;position:relative;width:18px;height:18px;transition:transform .4s var(--ease)}
+.faq-item summary .ic::before,.faq-item summary .ic::after{content:"";position:absolute;background:var(--ember);left:50%;top:50%}
+.faq-item summary .ic::before{width:16px;height:1.5px;transform:translate(-50%,-50%)}
+.faq-item summary .ic::after{width:1.5px;height:16px;transform:translate(-50%,-50%)}
+.faq-item[open] summary .ic{transform:rotate(135deg)}
+.faq-item p{color:var(--ink-2);line-height:1.75;max-width:64ch;padding:0 0 1.9rem;font-size:1.02rem}
+@media (hover:none),(max-width:900px){.faq-item summary{cursor:pointer}}
+
+</style>
+</head>
+<body>
+
+<canvas id="embers"></canvas>
+<div class="grain"></div>
+<div class="progress" id="progress"></div>
+<div class="cur-dot" id="curDot" aria-hidden="true"></div>
+
+<!-- ============ NAV ============ -->
+<nav class="nav" id="nav">
+  <a class="wm" href="/">NO<span class="x">X</span>TA</a>
+  <div class="nav-right">
+    <span class="clock" id="clock">TILBURG — 00:00:00</span>
+    <a class="nav-link" href="/portfolio" data-hover>Portfolio</a>
+    <a class="nav-cta" href="#contact-form" data-hover>Start a project</a>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<header class="page-hero full">
+  <div class="avail" data-reveal><span class="dot"></span>Available · Q3 2026 · 2 slots</div>
+  <div class="sec-label mono" data-reveal>Contact · Form 01 — Noxta Studio · 2026</div>
+  <h1 class="page-h1" style="margin-top:1.6rem">
+    <span class="line-mask"><span>Let's <span class="grad-text">talk.</span></span></span>
+  </h1>
+  <p class="page-lede" data-reveal>Tell me about your project — a paragraph is fine, more if you have it. I read every message and reply within 24 hours, usually faster.</p>
+  <div class="scroll-cue">Scroll
+    <svg viewBox="0 0 24 24"><path d="M4 7l8 7 8-7M4 13l8 7 8-7"/></svg>
+  </div>
+</header>
+
+<!-- ============ CONTACT GRID ============ -->
+<section class="section contact-grid" style="padding-top:8vh">
+  <!-- direct -->
+  <aside class="contact-direct">
+    <div class="sec-label mono col-label" data-reveal>Direct · No form needed</div>
+    <div class="fact-list" data-reveal>
+      <a class="fact" href="mailto:adrian@noxta.studio" data-hover><span class="k">Email</span><span class="v">adrian@noxta.studio</span></a>
+      <a class="fact" href="#contact-form" data-hover><span class="k">Discovery</span><span class="v">30-min call</span></a>
+      <div class="fact"><span class="k">Where</span><span class="v">Tilburg, NL · UTC+1</span></div>
+      <div class="fact"><span class="k">Hours</span><span class="v">Mon–Fri · 09–18 CET</span></div>
+      <a class="fact" href="https://wa.me/31617657327" target="_blank" rel="noopener" data-hover><span class="k">WhatsApp</span><span class="v">+31 6 17 657 327</span></a>
+    </div>
+    <p class="direct-note" data-reveal>Prefer to skip the form? Email me directly — same inbox, same 24-hour reply.</p>
+  </aside>
+
+  <!-- form -->
+  <div class="form-wrap" id="contact-form" data-reveal>
+    <div class="sec-label mono col-label">Detailed · Form 01</div>
+
+    <form id="cform" action="https://api.web3forms.com/submit" method="POST">
+      <input type="hidden" name="access_key" value="65886917-fcb6-469d-bf77-91c79c91776b">
+      <input type="hidden" name="subject" value="New project enquiry — noxta.studio/contact">
+      <input type="hidden" name="from_name" value="Noxta Studio · Contact form">
+      <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+      <div class="form-grid">
+        <div class="field">
+          <label for="f-name">// Your name</label>
+          <input id="f-name" name="name" type="text" placeholder="Jane Doe" required>
+        </div>
+        <div class="field">
+          <label for="f-email">// Email</label>
+          <input id="f-email" name="email" type="email" placeholder="jane@company.com" required>
+        </div>
+        <div class="field full">
+          <label for="f-company">// Company <span class="opt">(optional)</span></label>
+          <input id="f-company" name="company" type="text" placeholder="Company name">
+        </div>
+        <div class="field full">
+          <label>// Project type</label>
+          <div class="optgrid" data-optgroup="project_type">
+            <button type="button" class="opt-btn is-active">Website</button>
+            <button type="button" class="opt-btn">Brand identity</button>
+            <button type="button" class="opt-btn">E-commerce</button>
+            <button type="button" class="opt-btn">Maintenance</button>
+            <button type="button" class="opt-btn">Something else</button>
+          </div>
+          <input type="hidden" name="project_type" value="Website">
+        </div>
+        <div class="field full">
+          <label>// Budget</label>
+          <div class="optgrid" data-optgroup="budget">
+            <button type="button" class="opt-btn is-active">€600–1,200</button>
+            <button type="button" class="opt-btn">€1,200–2,000</button>
+            <button type="button" class="opt-btn">€3,500–6,000</button>
+            <button type="button" class="opt-btn">Not sure yet</button>
+          </div>
+          <input type="hidden" name="budget" value="€600–1,200">
+        </div>
+        <div class="field full">
+          <label>// Timeline</label>
+          <div class="optgrid" data-optgroup="timeline">
+            <button type="button" class="opt-btn is-active">ASAP</button>
+            <button type="button" class="opt-btn">&lt; 1 month</button>
+            <button type="button" class="opt-btn">1–3 months</button>
+            <button type="button" class="opt-btn">Flexible</button>
+          </div>
+          <input type="hidden" name="timeline" value="ASAP">
+        </div>
+        <div class="field full">
+          <label for="f-message">// Tell me more</label>
+          <textarea id="f-message" name="message" placeholder="A few sentences about your business and what you need. Links welcome." required></textarea>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary" data-hover data-magnetic><span class="fill"></span><span>Send it →</span></button>
+        <span class="form-note">No tracking · No mailing list · I reply personally</span>
+      </div>
+    </form>
+
+    <div class="form-success" id="formSuccess" hidden>
+      <div class="sec-label mono" style="margin-bottom:1.4rem">Sent · Form 01</div>
+      <h2>Got it<span data-firstname></span>.</h2>
+      <p class="lede">Your message is in. I read every one personally — expect a real reply, not a template.</p>
+      <div class="srow"><span class="k">// Reply from</span><span class="v">adrian@noxta.studio</span></div>
+      <div class="srow"><span class="k">// Usual time</span><span class="v">Within 24 hours</span></div>
+      <div class="srow"><span class="k">// Urgent · WhatsApp</span><span class="v">+31 6 17 657 327</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section class="section" id="faq" style="padding-top:4vh">
+  <div class="sec-head">
+    <div class="sec-label mono" data-reveal>02 · Common questions</div>
+    <h2 class="sec-title">
+      <span class="line-mask"><span>Things people</span></span>
+      <span class="line-mask"><span><span class="grad-text">usually ask.</span></span></span>
+    </h2>
+  </div>
+
+  <div class="faq-list" data-reveal>
+    <details class="faq-item">
+      <summary>What happens after I send this?<span class="ic" aria-hidden="true"></span></summary>
+      <p>You'll get a personal reply (not a templated one) within 24 hours. If it looks like a fit, I propose a 30-minute discovery call. If it doesn't, I'll tell you and point you somewhere useful.</p>
+    </details>
+    <details class="faq-item">
+      <summary>Do I have to know my budget?<span class="ic" aria-hidden="true"></span></summary>
+      <p>No, but it helps. Even a rough number lets me suggest the right tier. "Not sure" is a fine answer — we'll figure it out on the call.</p>
+    </details>
+    <details class="faq-item">
+      <summary>Can we meet in person?<span class="ic" aria-hidden="true"></span></summary>
+      <p>Yes, if you're near Tilburg, Eindhoven or Breda. Otherwise we work over video and shared docs — fine for 95% of projects.</p>
+    </details>
+    <details class="faq-item">
+      <summary>Do you sign NDAs?<span class="ic" aria-hidden="true"></span></summary>
+      <p>Yes, mutual NDAs before discovery if your project needs it. Just mention it in the message.</p>
+    </details>
+  </div>
+</section>
+
+<!-- ============ BRAND OUTRO ============ -->
+<section class="outro">
+  <div class="outro-ghost" aria-hidden="true" data-parallax="0.05">NOXTA</div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div>
+      <div class="wm">NO<span class="x">X</span>TA STUDIO</div>
+      <p>Adrian Tajti. A one-person studio in Tilburg. I work with small businesses, mostly Dutch and Belgian, who want a real person to call when something on their site needs changing.</p>
+    </div>
+    <div class="fl">
+      <span class="mono">// Pages</span>
+      <a href="/" data-hover>Home</a>
+      <a href="/portfolio" data-hover>Portfolio</a>
+      <a href="/website-laten-maken-tilburg" data-hover>Website laten maken — Tilburg</a>
+    </div>
+    <div class="fl">
+      <span class="mono">// Studio</span>
+      <a href="mailto:adrian@noxta.studio" data-hover>adrian@noxta.studio</a>
+      <a href="https://wa.me/31617657327" data-hover>WhatsApp</a>
+      <a href="/privacy" data-hover>Privacy</a>
+      <a href="/terms" data-hover>Terms</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="mono">Studio · Tilburg, NL · Est. 2026</span>
+    <span class="mono">© 2026 Noxta Studio — Hand-coded, no template</span>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="assets/noxta.js"></script>
+<script>
+/* ---------- contact form (works with or without GSAP) ---------- */
+(function(){
+  const form = document.getElementById("cform");
+  if(!form) return;
+  const success = document.getElementById("formSuccess");
+  const btn = form.querySelector("button[type=submit]");
+  /* segmented option buttons → hidden inputs */
+  form.querySelectorAll(".optgrid").forEach(grid => {
+    const input = form.querySelector('input[name="' + grid.dataset.optgroup + '"]');
+    grid.addEventListener("click", e => {
+      const b = e.target.closest(".opt-btn"); if(!b) return;
+      grid.querySelectorAll(".opt-btn").forEach(x => x.classList.remove("is-active"));
+      b.classList.add("is-active");
+      if(input) input.value = b.textContent.trim();
+    });
+  });
+  const setBtn = t => { const s = btn.querySelector("span:last-child"); if(s) s.textContent = t; };
+  form.addEventListener("submit", async e => {
+    e.preventDefault();
+    btn.disabled = true; setBtn("Sending…");
+    try{
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method:"POST", headers:{Accept:"application/json"}, body:new FormData(form)
+      });
+      const json = await res.json();
+      if(!json.success) throw new Error(json.message || "Failed");
+      const first = (form.elements.name.value || "").trim().split(/\s+/)[0];
+      const fn = success.querySelector("[data-firstname]");
+      if(fn && first) fn.textContent = ", " + first;
+      form.hidden = true; success.hidden = false;
+      success.scrollIntoView({behavior: (window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"), block:"center"});
+    }catch(err){
+      btn.disabled = false;
+      setBtn("Didn't send — email me directly →");
+      btn.onclick = () => location.href = "mailto:adrian@noxta.studio";
+    }
+  });
+})();
+</script>
+</body>
+</html>

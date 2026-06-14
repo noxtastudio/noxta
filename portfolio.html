@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio · Noxta Studio — Adrian Tajti, freelance web designer in Tilburg</title>
+<meta name="description" content="Selected work from Noxta Studio. I'd rather show one build in detail than ten in thumbnail. New cases land here as they ship.">
+<link rel="canonical" href="https://noxta.studio/portfolio">
+<!-- Favicons / app icons -->
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
+<link rel="shortcut icon" href="assets/favicon.ico">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<!-- Open Graph / social -->
+<meta property="og:title" content="Portfolio · Noxta Studio">
+<meta property="og:description" content="Selected work. Built by hand, kept by hand.">
+<meta property="og:image" content="https://noxta.studio/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://noxta.studio/portfolio">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Noxta Studio">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Portfolio · Noxta Studio">
+<meta name="twitter:description" content="Selected work. Built by hand, kept by hand.">
+<meta name="twitter:image" content="https://noxta.studio/og-image.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&family=Newsreader:ital,opsz,wght@1,6..72,200..500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/noxta.css">
+<style>
+/* ---------- case extras ---------- */
+.case-kicker .st{color:var(--ember-2)}
+.case-sub{font-family:var(--font-s);font-style:italic;font-weight:300;color:var(--ember-3);font-size:clamp(1.2rem,1.9vw,1.65rem);line-height:1.4;margin-bottom:1.6rem}
+.case-tags{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:2.3rem}
+.case-tags span{font-family:var(--font-m);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);border:1px solid var(--line-2);clip-path:polygon(0 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%);padding:.46rem .9rem}
+
+/* ---------- process steps ---------- */
+.steps{}
+.step{display:grid;grid-template-columns:auto 1fr 1.2fr;gap:3vw;align-items:start;padding:3.2rem 0;position:relative;transition:padding-left .45s var(--ease)}
+.step::before{content:"";position:absolute;left:0;top:0;height:100%;width:3px;background:var(--grad);transform:scaleY(0);transform-origin:0 0;transition:transform .5s var(--ease)}
+.step:hover{padding-left:1.6rem}
+.step:hover::before{transform:scaleY(1)}
+.step .n{font-family:var(--font-m);color:var(--ember-2);font-size:.8rem;padding-top:.4rem}
+.step h3{font-weight:900;font-variation-settings:"wdth" 118;text-transform:uppercase;font-size:clamp(1.5rem,3vw,2.4rem);letter-spacing:-.02em;line-height:1}
+.step .when{font-family:var(--font-m);font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-top:.85rem}
+.step p{color:var(--ink-2);line-height:1.7;max-width:50ch}
+@media (max-width:900px){.step{grid-template-columns:auto 1fr}.step p{grid-column:2}}
+
+/* ---------- page CTA ---------- */
+.page-cta{position:relative;z-index:2;padding:16vh 4vw 2vh;overflow:hidden}
+.page-cta .meta{font-family:var(--font-d);font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--ember-2);font-size:.88rem;margin-bottom:2.6rem}
+.page-cta h2{font-family:var(--font-d);font-weight:900;font-variation-settings:"wdth" 125;text-transform:uppercase;font-size:clamp(2.8rem,9.5vw,8.5rem);line-height:.9;letter-spacing:-.025em}
+.page-cta .actions{display:flex;gap:1.1rem;flex-wrap:wrap;margin-top:5vh}
+</style>
+</head>
+<body>
+
+<canvas id="embers"></canvas>
+<div class="grain"></div>
+<div class="progress" id="progress"></div>
+<div class="cur-dot" id="curDot" aria-hidden="true"></div>
+
+<!-- ============ NAV ============ -->
+<nav class="nav" id="nav">
+  <a class="wm" href="/">NO<span class="x">X</span>TA</a>
+  <div class="nav-right">
+    <span class="clock" id="clock">TILBURG — 00:00:00</span>
+    <a class="nav-link" href="/portfolio" data-hover>Portfolio</a>
+    <a class="nav-cta" href="/contact" data-hover>Start a project</a>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<header class="page-hero full">
+  <div class="avail" data-reveal><span class="dot"></span>Available · Q3 2026 · 2 slots</div>
+  <div class="sec-label mono" data-reveal>Portfolio — Noxta Studio · 2026</div>
+  <h1 class="page-h1" style="margin-top:1.6rem">
+    <span class="line-mask"><span>Built by hand,</span></span>
+    <span class="line-mask"><span><span class="grad-text">kept by hand.</span></span></span>
+  </h1>
+  <p class="page-lede" data-reveal>One live build today. I'd rather show one thing in detail than ten things in thumbnail. New cases land here as they ship — yours included, maybe.</p>
+  <div class="scroll-cue">Scroll
+    <svg viewBox="0 0 24 24"><path d="M4 7l8 7 8-7M4 13l8 7 8-7"/></svg>
+  </div>
+</header>
+
+<!-- ============ WORK ============ -->
+<section class="section" id="work" style="padding-top:2vh">
+  <article class="work-case">
+    <div class="work-info">
+      <div class="mono tag case-kicker" data-reveal>Case 001 · <span class="st">Live</span> · Travel blog</div>
+      <h3 data-split-words>Szabina</h3>
+      <p class="case-sub" data-reveal>Her travels, in short posts.</p>
+      <p data-reveal>Szabina travels and writes about it. After a trip she puts up a short post on her site: a title, a paragraph or two about the place, and the photos she took there. The site is static, hand-coded HTML. I added a small admin panel so she doesn't have to email me every time she wants to put up a new story. Hosted on GitHub Pages, which costs almost nothing to run.</p>
+      <div class="case-tags" data-reveal><span>Travel blog</span><span>Static HTML</span><span>Hand-coded</span><span>Self-edited</span></div>
+      <a class="btn btn-ghost" href="https://noxtastudio.github.io/szabina/" target="_blank" rel="noopener" data-hover data-magnetic><span class="fill"></span><span>Visit the site →</span></a>
+    </div>
+    <a class="work-shot" href="https://noxtastudio.github.io/szabina/" target="_blank" rel="noopener" data-hover-view>
+      <div class="frame-top"><i></i><i></i><i></i><span class="url">noxtastudio.github.io/szabina</span></div>
+      <div class="shot-fallback"><span>Szabina</span></div>
+      <img src="szabina-screenshot.webp" alt="Szabina — editorial travel journal homepage" loading="lazy" data-shot onerror="this.remove()">
+    </a>
+  </article>
+
+  <article class="work-case flip">
+    <div class="work-info">
+      <div class="mono tag case-kicker" data-reveal>Case 002 · <span class="st">Live</span> · E-commerce</div>
+      <h3 data-split-words>VOEP</h3>
+      <p class="case-sub" data-reveal>Vintage outboard engine parts, online.</p>
+      <p data-reveal>A 4,200-SKU WooCommerce build from zero. Custom child theme, tuned SKU search, IDEAL + Bancontact checkout, and a Mercedes-on-rails order pipeline. Built in roughly 60 hours of focused work. First sale within a week.</p>
+      <div class="work-cells" data-reveal>
+        <div class="cell"><span class="mono">// Built in</span><span class="v">~60 hours</span></div>
+        <div class="cell"><span class="mono">// First sale</span><span class="v">&lt; 7 days</span></div>
+        <div class="cell"><span class="mono">// Products</span><span class="v">4,200+ SKUs</span></div>
+        <div class="cell"><span class="mono">// Checkout</span><span class="v">IDEAL · Bancontact</span></div>
+      </div>
+      <div class="case-tags" data-reveal><span>WooCommerce</span><span>WordPress</span><span>IDEAL</span><span>Bancontact</span></div>
+      <a class="btn btn-ghost" href="https://vintageoutboardengineparts.com/" target="_blank" rel="noopener" data-hover data-magnetic><span class="fill"></span><span>Visit the site →</span></a>
+    </div>
+    <a class="work-shot" href="https://vintageoutboardengineparts.com/" target="_blank" rel="noopener" data-hover-view>
+      <div class="frame-top"><i></i><i></i><i></i><span class="url">vintageoutboardengineparts.com</span></div>
+      <div class="shot-fallback"><span>VOEP</span></div>
+      <img src="voep-screenshot.webp" alt="Vintage Outboard Parts — WooCommerce storefront" loading="lazy" data-shot onerror="this.remove()">
+    </a>
+  </article>
+</section>
+
+<!-- ============ PROCESS ============ -->
+<section class="section" id="process">
+  <div class="sec-head">
+    <div class="sec-label mono" data-reveal>02 · How a project goes</div>
+    <h2 class="sec-title">
+      <span class="line-mask"><span>Four steps.</span></span>
+      <span class="line-mask"><span><span class="grad-text">No theatre.</span></span></span>
+    </h2>
+    <p class="sec-sub" data-reveal>Every project follows the same four moves. You always know which one we're in.</p>
+  </div>
+
+  <div class="steps">
+    <div class="step" data-reveal>
+      <span class="n">/01</span>
+      <div><h3>Discovery call</h3><div class="when">30 minutes · Free</div></div>
+      <p>Tell me what you want and what you've tried. I'll tell you whether I can help and roughly what it'll cost.</p>
+    </div>
+    <div class="step" data-reveal>
+      <span class="n">/02</span>
+      <div><h3>Written scope</h3><div class="when">Within 48 hours</div></div>
+      <p>What gets built, what doesn't, what it costs, when it ships. One page. No surprise line items later.</p>
+    </div>
+    <div class="step" data-reveal>
+      <span class="n">/03</span>
+      <div><h3>Build</h3><div class="when">1–8 weeks, depending on scope</div></div>
+      <p>I disappear into the work. Every Friday you get a short update and a link to a live preview you can poke at.</p>
+    </div>
+    <div class="step" data-reveal>
+      <span class="n">/04</span>
+      <div><h3>Launch &amp; stay</h3><div class="when">Forever, if you want</div></div>
+      <p>I keep the lights on. Updates, backups, small edits handled within the week. Retainer or ad-hoc, your call.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA ============ -->
+<section class="page-cta">
+  <div class="meta" data-reveal>Two slots open · Q3 2026</div>
+  <h2>
+    <span class="line-mask"><span>Want me on</span></span>
+    <span class="line-mask"><span><span class="grad-text">your project?</span></span></span>
+  </h2>
+  <div class="actions" data-reveal>
+    <a class="btn btn-primary" href="/contact" data-hover data-magnetic><span class="fill"></span><span>Start a project →</span></a>
+    <a class="btn btn-ghost" href="/#pricing" data-hover data-magnetic><span class="fill"></span><span>See pricing</span></a>
+  </div>
+</section>
+
+<!-- ============ BRAND OUTRO ============ -->
+<section class="outro">
+  <div class="outro-ghost" aria-hidden="true" data-parallax="0.05">NOXTA</div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div>
+      <div class="wm">NO<span class="x">X</span>TA STUDIO</div>
+      <p>Adrian Tajti. A one-person studio in Tilburg. I work with small businesses, mostly Dutch and Belgian, who want a real person to call when something on their site needs changing.</p>
+    </div>
+    <div class="fl">
+      <span class="mono">// Pages</span>
+      <a href="/" data-hover>Home</a>
+      <a href="/contact" data-hover>Contact</a>
+      <a href="/website-laten-maken-tilburg" data-hover>Website laten maken — Tilburg</a>
+    </div>
+    <div class="fl">
+      <span class="mono">// Studio</span>
+      <a href="mailto:adrian@noxta.studio" data-hover>adrian@noxta.studio</a>
+      <a href="https://wa.me/31617657327" data-hover>WhatsApp</a>
+      <a href="/privacy" data-hover>Privacy</a>
+      <a href="/terms" data-hover>Terms</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="mono">Studio · Tilburg, NL · Est. 2026</span>
+    <span class="mono">© 2026 Noxta Studio — Hand-coded, no template</span>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="assets/noxta.js"></script>
+</body>
+</html>

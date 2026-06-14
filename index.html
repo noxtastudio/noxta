@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Noxta Studio — Adrian Tajti, freelance web designer in Tilburg</title>
+<meta name="description" content="One-person web design studio in Tilburg. Design, copy, code, payments — handled by one head. I stay until it works.">
+<link rel="canonical" href="https://noxta.studio/">
+<!-- Favicons / app icons -->
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
+<link rel="shortcut icon" href="assets/favicon.ico">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<!-- Open Graph / social -->
+<meta property="og:title" content="Noxta Studio · Built by hand, kept by hand.">
+<meta property="og:description" content="Freelance web designer in Tilburg. One person, full stack — design, copy, code, and payments handled in one head.">
+<meta property="og:image" content="https://noxta.studio/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://noxta.studio/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Noxta Studio">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Noxta Studio · Built by hand, kept by hand.">
+<meta name="twitter:description" content="Freelance web designer in Tilburg. One person, full stack.">
+<meta name="twitter:image" content="https://noxta.studio/og-image.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&family=Newsreader:ital,opsz,wght@1,6..72,200..500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/noxta.css">
+<style>
+/* ---------- preloader ---------- */
+.loader{position:fixed;inset:0;z-index:1000;background:var(--bg);display:flex;align-items:flex-end;justify-content:space-between;padding:4vw;overflow:hidden}
+.loader .lwm,.loader .lnum{position:relative;z-index:2}
+.loader .lbar{z-index:2}
+.loader .lwm{font-family:var(--font-d);font-variation-settings:"wdth" 125;font-weight:900;font-size:clamp(2rem,5vw,4rem);letter-spacing:-.02em;line-height:1}
+.loader .lwm .x{color:var(--ember)}
+.loader .lnum{font-family:var(--font-d);font-variation-settings:"wdth" 75;font-weight:200;font-size:clamp(5rem,16vw,13rem);line-height:.8;color:var(--ink);font-feature-settings:"tnum"}
+.loader .lbar{position:absolute;left:0;bottom:0;height:3px;width:100%;background:var(--grad);transform-origin:0 50%;transform:scaleX(0)}
+
+
+/* ---------- section ghost numbers (per-section placement) ---------- */
+/* 01 — vertical, hugging the right edge */
+#services .sec-ghost{writing-mode:vertical-rl;top:-9vh;right:1vw;font-size:clamp(10rem,15.5vw,19.5rem)}
+/* 02 — oversized, behind the headline, bleeding off the left */
+#work .sec-ghost{left:-3vw;right:auto;top:-12vh;font-size:clamp(13rem,21vw,24rem);-webkit-text-stroke:1px rgba(255,122,61,.18)}
+/* 03 — monumental, centered behind the principle rows */
+#how .sec-ghost{left:0;right:0;top:34%;text-align:center;font-size:clamp(16rem,30vw,34rem);-webkit-text-stroke:1px rgba(255,122,61,.13)}
+/* 04 — low right, half-buried under the pricing cards */
+#pricing .sec-ghost{right:3vw;top:30vh;font-size:clamp(12rem,19vw,22rem);-webkit-text-stroke:1px rgba(255,122,61,.19)}
+
+/* ---------- hero: cinematic full-bleed ---------- */
+.hero{position:relative;min-height:100svh;overflow:hidden;display:flex;flex-direction:column;justify-content:center;padding:7rem 7vw 6rem;z-index:2}
+.hero-visual{position:absolute;top:0;right:0;bottom:0;width:64vw;z-index:0;pointer-events:none;user-select:none}
+/* warm key-glow behind the left of the face — gives the cut-out depth */
+.hero-visual::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(40% 52% at 53% 45%,rgba(255,125,55,.22) 0%,rgba(200,80,30,.1) 42%,rgba(120,45,16,.03) 70%,transparent 85%)}
+.hero-visual .wrap{position:absolute;inset:0;z-index:1}
+.hero-visual img{position:absolute;right:-9vw;bottom:0;height:94%;width:auto;max-width:none;
+  filter:contrast(1.1) brightness(.9) saturate(.85);will-change:transform}
+.hero-left{position:relative;z-index:2;max-width:46rem}
+.hero-avail{display:flex;align-items:center;gap:.7rem;font-family:var(--font-m);font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-2);margin-bottom:3.5vh}
+.hero-avail .dot{width:7px;height:7px;border-radius:50%;background:var(--ember);box-shadow:0 0 12px var(--glow);animation:pulse 2.2s infinite}
+.hero-name{font-family:var(--font-d);font-weight:700;text-transform:uppercase;letter-spacing:.01em;line-height:.96;font-size:clamp(3.6rem,7.6vw,8.2rem);user-select:none}
+.hero-name .row{display:block;overflow:hidden;will-change:transform}
+.hero-name .ch{display:inline-block;will-change:transform}
+.hero-role{display:flex;align-items:center;gap:1rem;margin-top:3.2vh;font-family:var(--font-m);font-size:.78rem;letter-spacing:.3em;text-transform:uppercase;color:var(--ink-2)}
+.hero-role::before{content:"";width:38px;height:2px;background:var(--ember)}
+.hero-rule{border:0;height:1px;background:var(--line);margin:4vh 0 3.4vh;width:min(26rem,72%);margin-left:0}
+.hero-bio{color:var(--ink-2);font-size:clamp(1rem,1.25vw,1.2rem);line-height:1.75;max-width:38ch}
+.hero-ctas{display:flex;gap:1.1rem;flex-wrap:wrap;margin-top:5vh}
+.hero .plus{position:absolute;font-family:var(--font-m);color:var(--ember);font-size:1rem;z-index:3}
+.hero .plus.tl{top:6rem;left:2.4rem}
+.hero .plus.br{bottom:2.2rem;right:2.4rem}
+.scroll-cue{position:absolute;left:50%;bottom:2rem;transform:translateX(-50%);z-index:3;display:flex;flex-direction:column;align-items:center;gap:.7rem;
+  font-family:var(--font-m);font-size:.66rem;letter-spacing:.4em;text-transform:uppercase;color:var(--ember-2)}
+.scroll-cue svg{width:22px;height:22px;stroke:var(--ember);fill:none;stroke-width:2;animation:cue 1.6s var(--ease) infinite}
+@keyframes cue{0%,100%{transform:translateY(0);opacity:1}50%{transform:translateY(7px);opacity:.45}}
+/* stacked hero: whole portrait, centered — darkened backdrop blends into the page */
+@media (max-width:1080px){
+  header.hero{flex-direction:column;justify-content:flex-start;gap:1.4rem;padding:6.5rem 6vw 4rem}
+  .hero-visual{position:relative;inset:auto;width:100%;height:auto;margin:0;order:-1;opacity:1;display:flex;justify-content:center}
+  .hero-visual .wrap{position:relative;inset:auto;width:auto;height:auto;-webkit-mask-image:none;mask-image:none}
+  .hero-visual img{position:relative;right:auto;bottom:auto;display:block;width:auto;height:auto;max-height:50vh;max-width:100%;object-fit:contain;
+    -webkit-mask-image:linear-gradient(180deg,#000 84%,transparent 100%);mask-image:linear-gradient(180deg,#000 84%,transparent 100%)}
+  .hero-left{max-width:none}
+  .hero-bio{max-width:62ch}
+  .scroll-cue{display:none}
+  .hero .plus{display:none}
+}
+@media (max-width:700px){
+  .hero-visual img{max-height:40vh}
+}
+
+/* ---------- mesh atmosphere (anchored to each section's ghost) ---------- */
+#services::before,#work::before,#how::before,#pricing::before,.cta::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);
+  background-size:56px 56px;
+  -webkit-mask-image:radial-gradient(var(--mesh-size,52% 64%) at var(--mesh-x,50%) var(--mesh-y,50%),#000 0,transparent 72%);
+  mask-image:radial-gradient(var(--mesh-size,52% 64%) at var(--mesh-x,50%) var(--mesh-y,50%),#000 0,transparent 72%)}
+#services{--mesh-x:94%;--mesh-y:14%;--mesh-size:46% 52%}
+#work{--mesh-x:6%;--mesh-y:5%;--mesh-size:48% 42%}
+#how{--mesh-x:50%;--mesh-y:48%;--mesh-size:64% 70%}
+#pricing{--mesh-x:90%;--mesh-y:32%;--mesh-size:46% 56%}
+.cta{--mesh-x:86%;--mesh-y:88%;--mesh-size:52% 60%}
+@media (max-width:900px){#services::before,#work::before,#how::before,#pricing::before,.cta::before{display:none}}
+
+/* ---------- intro: readout ---------- */
+.intro{border-top:1px solid var(--line);position:relative}
+.intro::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);
+  background-size:56px 56px;
+  -webkit-mask-image:radial-gradient(85% 95% at 74% 38%,#000 0,transparent 72%);
+  mask-image:radial-gradient(85% 95% at 74% 38%,#000 0,transparent 72%)}
+.intro-grid{position:relative;z-index:1;display:grid;grid-template-columns:1.12fr .88fr;gap:5vw;align-items:start}
+.intro h2{font-size:clamp(2.8rem,6.4vw,5.6rem)}
+.intro-right{position:relative}
+.intro-ghost{position:absolute;top:-12%;right:55%;z-index:0;font-family:var(--font-d);font-weight:700;
+  font-size:clamp(12rem,22vw,24rem);line-height:.8;color:transparent;-webkit-text-stroke:1px rgba(255,122,61,.26);user-select:none;pointer-events:none}
+.readout{position:relative;z-index:1;max-width:34rem;margin-left:auto;border:1px solid var(--line-2);background:linear-gradient(180deg,rgba(24,22,20,.92),rgba(17,16,16,.96));
+  clip-path:polygon(0 0,100% 0,100% calc(100% - 20px),calc(100% - 20px) 100%,0 100%);padding:1.6rem 1.7rem 1.8rem}
+.readout::before,.readout::after{content:"";position:absolute;width:14px;height:14px;pointer-events:none;z-index:2}
+.readout::before{top:.65rem;left:.65rem;border-top:1px solid var(--ember);border-left:1px solid var(--ember)}
+.readout::after{bottom:.65rem;right:1.4rem;border-bottom:1px solid var(--ember);border-right:1px solid var(--ember)}
+.ro-head{display:flex;justify-content:space-between;align-items:center;font-family:var(--font-m);font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ember-2);padding-bottom:1.1rem;border-bottom:1px solid var(--line)}
+.ro-head .dot{width:7px;height:7px;border-radius:50%;background:var(--ember);box-shadow:0 0 10px var(--glow);animation:pulse 2.2s infinite}
+.ro-row{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;padding:1.05rem 0;border-bottom:1px solid var(--line)}
+.ro-row .k{font-family:var(--font-m);font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3)}
+.ro-row .v{font-family:var(--font-d);font-weight:600;font-size:1.02rem;letter-spacing:.04em;text-transform:uppercase;text-align:right}
+.ro-row .v b{color:var(--ember-2);font-weight:600}
+.ro-radar{display:flex;align-items:center;gap:1.4rem;padding-top:1.4rem}
+.ro-radar svg{width:104px;height:104px;flex:none}
+.ro-radar circle.ring{fill:none;stroke:var(--line-2);stroke-width:1}
+.ro-radar line.cross{stroke:var(--line);stroke-width:1}
+.ro-radar .sweep{stroke:var(--ember);stroke-width:1.5;opacity:.8;transform-origin:52px 52px;animation:sweep 4.5s linear infinite}
+.ro-radar .blip{fill:var(--ember);animation:pulse 2.2s infinite}
+@keyframes sweep{to{transform:rotate(360deg)}}
+.ro-loc .city{font-family:var(--font-d);font-weight:600;font-size:1.05rem;letter-spacing:.05em;text-transform:uppercase}
+.ro-loc .sub{font-family:var(--font-m);font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);margin-top:.45rem}
+@media (max-width:900px){
+  .intro-grid{grid-template-columns:1fr}
+  .intro-ghost{display:none}
+  .intro::before{-webkit-mask-image:radial-gradient(120% 70% at 50% 20%,#000 0,transparent 75%);mask-image:radial-gradient(120% 70% at 50% 20%,#000 0,transparent 75%)}
+}
+
+/* ---------- services stack ---------- */
+.svc-stack{display:flex;flex-direction:column;gap:0}
+.svc-card{position:sticky;top:14vh;background:var(--bg-2);border:1px solid var(--line);clip-path:polygon(0 0,100% 0,100% calc(100% - 20px),calc(100% - 20px) 100%,0 100%);padding:clamp(1.6rem,3.4vw,3.2rem);display:grid;grid-template-columns:auto 1fr auto;gap:3vw;align-items:center;margin-bottom:1.2rem;overflow:hidden}
+.svc-card::before{content:"";position:absolute;inset:0;background:radial-gradient(600px circle at var(--mx,50%) var(--my,50%),rgba(255,77,21,.09),transparent 45%);opacity:0;transition:opacity .4s;pointer-events:none}
+.svc-card:hover::before{opacity:1}
+.svc-card .n{font-family:var(--font-m);font-size:.8rem;color:var(--ember-2)}
+.svc-card h3{font-family:var(--font-d);font-weight:700;text-transform:uppercase;font-size:clamp(1.9rem,4.8vw,4rem);letter-spacing:.01em;line-height:.98}
+.svc-dim{position:absolute;inset:0;background:#0a0908;opacity:0;pointer-events:none;z-index:3}
+.svc-card .desc{color:var(--ink-2);line-height:1.65;max-width:36ch;margin-top:.9rem;font-size:clamp(.95rem,1.1vw,1.05rem)}
+.svc-tags{display:flex;flex-direction:column;gap:.5rem;align-items:flex-end}
+.svc-tags span{font-family:var(--font-m);font-size:.64rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);border:1px solid var(--line-2);clip-path:polygon(0 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%);padding:.46rem .9rem;white-space:nowrap}
+@media (max-width:900px){.svc-card{grid-template-columns:1fr;gap:1.1rem}.svc-tags{flex-direction:row;flex-wrap:wrap;align-items:flex-start}}
+
+
+/* ---------- work: client quote ---------- */
+.work-quote{position:absolute;right:0;top:.5rem;z-index:1;max-width:30rem;padding-left:1.6rem;border-left:2px solid var(--ember)}
+.work-quote::before{content:"";position:absolute;top:-2px;left:-2px;width:12px;height:12px;border-top:1px solid var(--ember);border-left:1px solid var(--ember)}
+.wq-label{font-family:var(--font-m);font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ember-2);margin-bottom:1.1rem}
+.wq-text{font-family:var(--font-s);font-style:italic;font-weight:300;font-size:clamp(1.15rem,1.5vw,1.5rem);line-height:1.55;color:var(--ink)}
+.wq-who{margin-top:1.3rem;font-family:var(--font-d);font-weight:600;font-size:.85rem;letter-spacing:.08em;text-transform:uppercase}
+.wq-who span{font-family:var(--font-m);font-weight:400;font-size:.64rem;letter-spacing:.14em;color:var(--ink-3);margin-left:.6rem}
+.work-quotes{position:absolute;right:0;top:.5rem;z-index:1;display:flex;flex-direction:column;gap:2.2rem;max-width:30rem}
+.work-quotes .work-quote{position:static;max-width:none}
+@media (max-width:1100px){.work-quotes{position:static;margin-top:2.6rem;max-width:40rem}}
+
+/* ---------- work: horizontal-scroll choreography ---------- */
+#work.work-h{height:100svh;padding:0;overflow:hidden}
+.work-h-pin{height:100%}
+.work-h-track{display:flex;height:100%;width:max-content;will-change:transform}
+.hpanel{flex:none;width:100vw;height:100%;display:flex;flex-direction:column;justify-content:center;padding:7rem 4vw 5rem;position:relative}
+.hpanel-intro .sec-head{margin-bottom:0;max-width:none}
+.hpanel .work-case{padding:0}
+.hpanel-cue{position:absolute;left:4vw;bottom:3.2rem;display:flex;align-items:center;gap:.85rem;font-family:var(--font-m);font-size:.66rem;letter-spacing:.4em;text-transform:uppercase;color:var(--ember-2)}
+.hpanel-cue svg{width:30px;height:18px;stroke:var(--ember);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;animation:cueX 1.6s var(--ease) infinite}
+@keyframes cueX{0%,100%{transform:translateX(0);opacity:.5}50%{transform:translateX(7px);opacity:1}}
+@media (max-width:900px),(prefers-reduced-motion:reduce){
+  #work.work-h{height:auto;overflow:visible;padding:14vh 4vw}
+  .work-h-pin{height:auto}
+  .work-h-track{flex-direction:column;width:100%;transform:none!important;will-change:auto}
+  .hpanel{width:100%;height:auto;min-height:0;padding:0;display:block}
+  .hpanel-intro{margin-bottom:9vh}
+  .hpanel-intro .sec-head{margin-bottom:0}
+  .hpanel + .hpanel{margin-top:9vh}
+  .hpanel-cue{display:none}
+}
+
+/* ---------- marquee ---------- */
+.marquee{position:relative;z-index:2;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:2.2rem 0;overflow:hidden;background:var(--bg-2)}
+.marquee .track{display:flex;gap:4rem;width:max-content;will-change:transform}
+.marquee .item{display:flex;align-items:center;gap:4rem;font-weight:900;font-variation-settings:"wdth" 122;text-transform:uppercase;font-size:clamp(1.6rem,3.4vw,2.8rem);letter-spacing:-.02em;white-space:nowrap}
+.marquee .item em{font-family:var(--font-s);font-style:italic;font-weight:300;color:var(--ember-2)}
+.marquee .item .sep{width:10px;height:10px;background:var(--ember);border-radius:50%;flex:none}
+
+/* ---------- believe ---------- */
+.believe-row{padding:3.4rem 0;display:grid;grid-template-columns:auto 1fr 1.1fr;gap:3vw;align-items:start;position:relative;transition:padding-left .45s var(--ease)}
+
+.believe-row::before{content:"";position:absolute;left:0;top:0;height:100%;width:3px;background:var(--grad);transform:scaleY(0);transform-origin:0 0;transition:transform .5s var(--ease)}
+.believe-row:hover{padding-left:1.6rem}
+.believe-row:hover::before{transform:scaleY(1)}
+.believe-row .n{font-family:var(--font-m);color:var(--ember-2);font-size:.8rem;padding-top:.5rem}
+.believe-row h3{font-weight:900;font-variation-settings:"wdth" 118;text-transform:uppercase;font-size:clamp(1.7rem,3.6vw,3rem);letter-spacing:-.02em;line-height:1}
+.believe-row p{color:var(--ink-2);line-height:1.7;max-width:52ch}
+@media (max-width:900px){.believe-row{grid-template-columns:auto 1fr}.believe-row p{grid-column:2}}
+
+/* ---------- pricing ---------- */
+.ptabs{position:relative;z-index:1;display:inline-flex;border:1px solid var(--line-2);padding:.3rem;gap:.3rem;margin-bottom:5vh;background:var(--bg-2);clip-path:polygon(0 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%)}
+.ptab{font-family:var(--font-d);font-weight:600;font-size:.72rem;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-2);background:transparent;border:0;padding:.75rem 1.4rem;cursor:none;transition:color .3s,background .3s}
+@media (hover:none),(max-width:900px){.ptab{cursor:pointer}}
+.ptab.is-active{background:var(--grad);color:#0a0908;font-weight:500}
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;align-items:stretch}
+.pcard{position:relative;background:var(--bg-2);border:1px solid var(--line);border-radius:18px;padding:2.2rem 1.9rem;display:flex;flex-direction:column;gap:1.4rem;overflow:hidden;transition:transform .45s var(--ease-out),border-color .45s}
+.pcard:hover{transform:translateY(-8px);border-color:rgba(255,122,61,.4)}
+.pcard.is-reco{border-color:rgba(255,77,21,.55);background:linear-gradient(180deg,rgba(255,77,21,.07),rgba(17,16,16,1) 40%)}
+.pcard .flag{position:absolute;top:1.3rem;right:1.3rem;font-family:var(--font-m);font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:#0a0908;background:var(--grad);border-radius:99px;padding:.4rem .8rem;font-weight:500}
+.pcard .amount{font-weight:900;font-variation-settings:"wdth" 112;font-size:clamp(1.7rem,2.4vw,2.3rem);letter-spacing:-.02em}
+.pcard .pname{font-weight:900;font-variation-settings:"wdth" 122;text-transform:uppercase;font-size:1.1rem;letter-spacing:.02em}
+.pcard .pdesc{font-family:var(--font-s);font-style:italic;font-weight:300;color:var(--ember-3);font-size:1.15rem}
+.pcard ul{list-style:none;display:flex;flex-direction:column;gap:.7rem;border-top:1px solid var(--line);padding-top:1.4rem;flex:1}
+.pcard li{color:var(--ink-2);font-size:.92rem;line-height:1.5;padding-left:1.3rem;position:relative}
+.pcard li::before{content:"";position:absolute;left:0;top:.55em;width:7px;height:1.5px;background:var(--ember)}
+.pcard .ideal{font-size:.85rem;color:var(--ink-3);line-height:1.6;border-top:1px solid var(--line);padding-top:1.2rem}
+@media (max-width:1000px){.pgrid{grid-template-columns:1fr}}
+
+.careplus{margin-top:1.2rem;border:1px dashed rgba(255,122,61,.4);border-radius:18px;padding:2.4rem;display:grid;grid-template-columns:1.2fr .8fr;gap:3vw;background:rgba(255,77,21,.03)}
+.careplus h3{font-weight:900;font-variation-settings:"wdth" 120;text-transform:uppercase;font-size:clamp(1.6rem,3vw,2.4rem);letter-spacing:-.02em;margin:.8rem 0 .4rem}
+.careplus .amt{font-weight:900;font-size:1.3rem}
+.careplus .amt small{font-family:var(--font-m);font-size:.7rem;color:var(--ink-3);font-weight:400;margin-left:.7rem}
+.careplus p{color:var(--ink-2);line-height:1.7;margin-top:1rem;max-width:56ch}
+.careplus ul{list-style:none;display:flex;flex-direction:column;gap:.7rem}
+.careplus li{color:var(--ink-2);font-size:.92rem;line-height:1.5;padding-left:1.3rem;position:relative}
+.careplus li::before{content:"";position:absolute;left:0;top:.55em;width:7px;height:1.5px;background:var(--ember)}
+.careplus .foot{font-family:var(--font-m);font-size:.66rem;letter-spacing:.1em;color:var(--ink-3);margin-top:1.4rem;text-transform:uppercase}
+@media (max-width:900px){.careplus{grid-template-columns:1fr}}
+
+/* ---------- CTA ---------- */
+.cta{position:relative;min-height:92svh;display:flex;flex-direction:column;justify-content:center;overflow:hidden}
+.cta-meta{display:flex;justify-content:space-between;margin-bottom:7vh;gap:2rem;flex-wrap:wrap}
+.cta-meta .blk{display:flex;flex-direction:column;gap:.4rem}
+.cta h2{font-weight:900;font-variation-settings:"wdth" 125;text-transform:uppercase;font-size:clamp(4rem,15vw,14rem);line-height:.85;letter-spacing:-.035em}
+.cta .lede{max-width:52ch;color:var(--ink-2);font-size:clamp(1rem,1.3vw,1.2rem);line-height:1.7;margin:4vh 0 5vh}
+.cta-actions{display:flex;align-items:center;gap:1.4rem;flex-wrap:wrap}
+.cta .wa{font-family:var(--font-m);font-size:.74rem;letter-spacing:.1em;color:var(--ink-3)}
+.cta .wa b{color:var(--ink);font-weight:500}
+.cta-ghost-word{position:absolute;bottom:-2vw;right:-2vw;font-family:var(--font-d);font-weight:700;text-transform:uppercase;font-size:clamp(8rem,26vw,26rem);line-height:.8;color:transparent;-webkit-text-stroke:1px rgba(255,122,61,.17);pointer-events:none;user-select:none;white-space:nowrap}
+</style>
+</head>
+<body>
+
+<canvas id="embers"></canvas>
+<div class="grain"></div>
+<div class="progress" id="progress"></div>
+<div class="cur-dot" id="curDot" aria-hidden="true"></div>
+
+<!-- ============ PRELOADER ============ -->
+<div class="loader" id="loader">
+  <div class="lwm">NO<span class="x">X</span>TA<br>STUDIO</div>
+  <div class="lnum" id="loaderNum">000</div>
+  <div class="lbar" id="loaderBar"></div>
+</div>
+
+<!-- ============ NAV ============ -->
+<nav class="nav" id="nav">
+  <a class="wm" href="/">NO<span class="x">X</span>TA</a>
+  <div class="nav-right">
+    <span class="clock" id="clock">TILBURG — 00:00:00</span>
+    <a class="nav-link" href="/portfolio" data-hover>Portfolio</a>
+    <a class="nav-cta" href="/contact" data-hover>Start a project</a>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<header class="hero" id="hero">
+  <span class="plus tl">+</span>
+  <span class="plus br">+</span>
+
+  <div class="hero-visual" aria-hidden="true">
+    <div class="wrap">
+      <img id="heroImg" src="assets/portrait-hero.webp" alt="" fetchpriority="high">
+    </div>
+  </div>
+
+  <div class="hero-left">
+    <div class="hero-avail" data-reveal><span class="dot"></span>Available · Q3 2026 · 2 slots</div>
+    <h1 class="hero-name" aria-label="Adrian Tajti">
+      <span class="row"><span class="word" data-split>ADRIAN</span></span>
+      <span class="row"><span class="word grad-text" data-split>TAJTI.</span></span>
+    </h1>
+    <div class="hero-role" data-reveal>Freelance Web Designer, Tilburg</div>
+    <hr class="hero-rule" data-reveal>
+    <p class="hero-bio" data-reveal>I'm a freelance web designer in Tilburg. There's no agency behind Noxta, just me. I do the design, write the copy, and write the code. After launch I stick around to fix things and add new ones as you need them. You email me, I email you back.</p>
+    <div class="hero-ctas">
+      <a class="btn btn-primary" href="/contact" data-hover data-magnetic><span class="fill"></span><span>Start a project →</span></a>
+      <a class="btn btn-ghost" href="#pricing" data-hover data-magnetic><span class="fill"></span><span>Pricing ↓</span></a>
+    </div>
+  </div>
+
+  <div class="scroll-cue">Scroll
+    <svg viewBox="0 0 24 24"><path d="M4 7l8 7 8-7M4 13l8 7 8-7"/></svg>
+  </div>
+</header>
+
+<!-- ============ INTRO 00 ============ -->
+<section class="section intro" id="about">
+  <div class="intro-grid">
+    <div>
+      <div class="sec-label mono" data-reveal>00 · Who I am</div>
+      <h2 class="sec-title" style="margin-top:1.4rem">
+        <span class="line-mask"><span>Just me.</span></span>
+        <span class="line-mask"><span><span class="grad-text">No agency</span></span></span>
+        <span class="line-mask"><span>in the back.</span></span>
+      </h2>
+      <p class="sec-sub" style="margin-top:2.2rem" data-reveal>I work alone on purpose. Keeping the whole project in one head means nothing gets dropped between specialists who don't know your business as well as you do. The trade-off is capacity: I usually have two clients at a time, which is why slots are worth booking early.</p>
+    </div>
+    <div class="intro-right">
+      <div class="intro-ghost" data-parallax="0.12" aria-hidden="true">00</div>
+      <aside class="readout" data-reveal aria-label="Studio facts">
+        <div class="ro-head"><span>// Studio readout</span><span class="dot"></span></div>
+        <div class="ro-row"><span class="k">Est.</span><span class="v"><span data-count="2026" data-start="1970">1970</span></span></div>
+        <div class="ro-row"><span class="k">Reply window</span><span class="v">&lt; <b><span data-count="24">0</span>h</b></span></div>
+        <div class="ro-row"><span class="k">Capacity</span><span class="v"><b><span data-count="2" data-pad="2">00</span></b> clients at a time</span></div>
+        <div class="ro-row"><span class="k">Build</span><span class="v">Hand-coded · No template</span></div>
+        <div class="ro-radar">
+          <svg viewBox="0 0 104 104" aria-hidden="true">
+            <circle class="ring" cx="52" cy="52" r="14"/>
+            <circle class="ring" cx="52" cy="52" r="30"/>
+            <circle class="ring" cx="52" cy="52" r="46"/>
+            <line class="cross" x1="52" y1="2" x2="52" y2="102"/>
+            <line class="cross" x1="2" y1="52" x2="102" y2="52"/>
+            <line class="sweep" x1="52" y1="52" x2="52" y2="8"/>
+            <circle class="blip" cx="63" cy="41" r="3.5"/>
+          </svg>
+          <div class="ro-loc">
+            <div class="city">Tilburg, NL</div>
+            <div class="sub">51.56°N · 5.09°E // On the map</div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SERVICES 01 ============ -->
+<section class="section" id="services">
+  <div class="sec-head">
+    <div class="sec-ghost" aria-hidden="true" data-parallax="0.1">01</div>
+    <div class="sec-label mono" data-reveal>01 · What I do</div>
+    <h2 class="sec-title">
+      <span class="line-mask"><span>Four jobs.</span></span>
+      <span class="line-mask"><span><span class="grad-text">One head.</span></span></span>
+    </h2>
+    <p class="sec-sub" data-reveal>I handle the design, the copy, the code, and the payments myself. So there's no handoff between people who barely know each other, and if something breaks the person to call is me.</p>
+  </div>
+
+  <div class="svc-stack">
+    <div class="svc-card" data-spotlight>
+      <span class="n">/01</span>
+      <div><h3>Websites</h3><p class="desc">Multi-page sites with SEO and analytics wired in from day one, not bolted on the week before launch.</p></div>
+      <div class="svc-tags"><span>Multi-page</span><span>Hand-coded</span><span>Mobile-first</span></div>
+    <div class="svc-dim"></div>
+    </div>
+    <div class="svc-card" data-spotlight>
+      <span class="n">/02</span>
+      <div><h3>E-commerce</h3><p class="desc">Real shops with real payment flows. VOEP runs 4,200 SKUs on the setup I built.</p></div>
+      <div class="svc-tags"><span>WooCommerce</span><span>Shopify</span><span>IDEAL / Bancontact</span></div>
+    <div class="svc-dim"></div>
+    </div>
+    <div class="svc-card" data-spotlight>
+      <span class="n">/03</span>
+      <div><h3>Brand</h3><p class="desc">Wordmark, palette, and type system. Enough so the site looks like a brand, not a template.</p></div>
+      <div class="svc-tags"><span>Wordmark</span><span>Palette</span><span>Type system</span></div>
+    <div class="svc-dim"></div>
+    </div>
+    <div class="svc-card" data-spotlight>
+      <span class="n">/04</span>
+      <div><h3>Maintenance</h3><p class="desc">I stick around after launch. Updates, backups, and the small edits you'd usually be afraid to ask for.</p></div>
+      <div class="svc-tags"><span>Retainer</span><span>On call</span><span>Same-week edits</span></div>
+    <div class="svc-dim"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WORK 02 — horizontal scroll (intro → Szabina → VOEP) ============ -->
+<section class="work-h" id="work" aria-label="Selected work">
+  <div class="work-h-pin">
+    <div class="work-h-track" id="workTrack">
+
+      <!-- Panel A — section intro -->
+      <div class="hpanel hpanel-intro">
+        <div class="sec-head">
+          <div class="sec-ghost" aria-hidden="true" data-parallax="0.1">02</div>
+          <div class="sec-label mono" data-reveal>02 · Selected work</div>
+          <h2 class="sec-title">
+            <span class="line-mask"><span>Selected</span></span>
+            <span class="line-mask"><span><span class="grad-text">work.</span></span></span>
+          </h2>
+          <div class="work-quotes">
+            <aside class="work-quote" data-reveal>
+              <div class="wq-label">// From the client</div>
+              <blockquote class="wq-text">"[ PASTE SZABINA'S REAL QUOTE HERE — DO NOT SHIP THIS PLACEHOLDER ]"</blockquote>
+              <div class="wq-who">Szabina <span>Case 001 · Travel blog</span></div>
+            </aside>
+            <aside class="work-quote" data-reveal>
+              <div class="wq-label">// From the client</div>
+              <blockquote class="wq-text">"[ PASTE ALEX'S REAL QUOTE HERE — DO NOT SHIP THIS PLACEHOLDER ]"</blockquote>
+              <div class="wq-who">Alex <span>Case 002 · Vintage Outboard Parts</span></div>
+            </aside>
+          </div>
+        </div>
+        <div class="hpanel-cue" aria-hidden="true">
+          <span>Scroll</span>
+          <svg viewBox="0 0 30 18"><path d="M2 9h25M21 3l6 6-6 6"/></svg>
+        </div>
+      </div>
+
+      <!-- Panel B — Szabina -->
+      <div class="hpanel">
+        <article class="work-case">
+          <div class="work-info">
+            <div class="mono tag" data-reveal>Case 001 · Personal travel blog</div>
+            <h3 data-split-words>Szabina</h3>
+            <p data-reveal>Szabina travels and writes about it. After a trip she puts up a short post: a title, a paragraph or two, and the photos she took. I built her a static, hand-coded site with a small admin she runs herself.</p>
+            <div class="work-cells" data-reveal>
+              <div class="cell"><span class="mono">// Cadence</span><span class="v">Per trip</span></div>
+              <div class="cell"><span class="mono">// Editor</span><span class="v">Self-served</span></div>
+              <div class="cell"><span class="mono">// Stack</span><span class="v">Static · Hand-coded</span></div>
+              <div class="cell"><span class="mono">// Hosting</span><span class="v">GitHub Pages</span></div>
+            </div>
+            <a class="btn btn-ghost" href="https://noxtastudio.github.io/szabina/" target="_blank" rel="noopener" data-hover data-magnetic><span class="fill"></span><span>Visit the site →</span></a>
+          </div>
+          <a class="work-shot" href="https://noxtastudio.github.io/szabina/" target="_blank" rel="noopener" data-hover-view>
+            <div class="frame-top"><i></i><i></i><i></i><span class="url">noxtastudio.github.io/szabina</span></div>
+            <div class="shot-fallback"><span>Szabina</span></div>
+            <img src="szabina-screenshot.webp" alt="Szabina — editorial photo journal homepage" loading="lazy" data-shot onerror="this.remove()">
+          </a>
+        </article>
+      </div>
+
+      <!-- Panel C — VOEP -->
+      <div class="hpanel">
+        <article class="work-case flip">
+          <div class="work-info">
+            <div class="mono tag" data-reveal>Case 002 · Vintage Outboard Parts</div>
+            <h3 data-split-words>VOEP</h3>
+            <p data-reveal>Alex runs a vintage outboard parts shop in Belgium. Sixty years of inventory, no website. We built him a 4,200-SKU store with IDEAL checkout and a product search I tuned by hand. First sale came within a week.</p>
+            <div class="work-cells" data-reveal>
+              <div class="cell"><span class="mono">// Built in</span><span class="v">~60 hours</span></div>
+              <div class="cell"><span class="mono">// First sale</span><span class="v">&lt; 7 days</span></div>
+              <div class="cell"><span class="mono">// Products</span><span class="v">4,200+ SKUs</span></div>
+              <div class="cell"><span class="mono">// Stack</span><span class="v">WP · Woo · Flat</span></div>
+            </div>
+            <a class="btn btn-ghost" href="https://vintageoutboardengineparts.com/" target="_blank" rel="noopener" data-hover data-magnetic><span class="fill"></span><span>Visit the site →</span></a>
+          </div>
+          <a class="work-shot" href="https://vintageoutboardengineparts.com/" target="_blank" rel="noopener" data-hover-view>
+            <div class="frame-top"><i></i><i></i><i></i><span class="url">vintageoutboardengineparts.com</span></div>
+            <div class="shot-fallback"><span>VOEP</span></div>
+            <img src="voep-screenshot.webp" alt="Vintage Outboard Parts — homepage screenshot" loading="lazy" data-shot onerror="this.remove()">
+          </a>
+        </article>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ BELIEVE 03 ============ -->
+<section class="section" id="how">
+  <div class="sec-ghost" aria-hidden="true" data-parallax="0.06">03</div>
+  <div class="sec-head">
+    <div class="sec-label mono" data-reveal>03 · How I work</div>
+    <h2 class="sec-title">
+      <span class="line-mask"><span>How this</span></span>
+      <span class="line-mask"><span><span class="grad-text">usually goes.</span></span></span>
+    </h2>
+  </div>
+
+  <div class="believe-row" data-reveal>
+    <span class="n">/01</span>
+    <h3>I stay until it works.</h3>
+    <p>Lots of freelancers ship and disappear. I don't. Retainer or ad-hoc, you can reach me after launch. That's usually when the real work starts anyway.</p>
+  </div>
+  <div class="believe-row" data-reveal>
+    <span class="n">/02</span>
+    <h3>Details are the work.</h3>
+    <p>Generic sites look generic because nobody sweated the details. If a button is off by two pixels I'll catch it. So will your visitors, even if they can't quite say why something feels off.</p>
+  </div>
+  <div class="believe-row" data-reveal>
+    <span class="n">/03</span>
+    <h3>Yours to keep.</h3>
+    <p>When the project ends you own all of it: the code, the domain, the logins, the content. If you decide to take it somewhere else later, I'll help you move.</p>
+  </div>
+</section>
+
+<!-- ============ MARQUEE 2 ============ -->
+<div class="marquee" id="marquee2">
+  <div class="track" id="marqueeTrack2"></div>
+</div>
+
+<!-- ============ PRICING 04 ============ -->
+<section class="section" id="pricing">
+  <div class="sec-ghost" aria-hidden="true" data-parallax="0.08">04</div>
+  <div class="sec-head">
+    <div class="sec-label mono" data-reveal>04 · Pricing</div>
+    <h2 class="sec-title">
+      <span class="line-mask"><span>What it</span></span>
+      <span class="line-mask"><span><span class="grad-text">costs.</span></span></span>
+    </h2>
+    <p class="sec-sub" data-reveal>Honest ranges below. I quote you a fixed number after a 30-minute call, and that number doesn't move unless the scope does.</p>
+  </div>
+
+  <div class="ptabs" role="tablist" aria-label="Pricing type" data-reveal>
+    <button class="ptab is-active" id="tab-onetime" role="tab" aria-selected="true" aria-controls="pgrid" data-tab="onetime" data-hover>One-time project</button>
+    <button class="ptab" id="tab-monthly" role="tab" aria-selected="false" aria-controls="pgrid" data-tab="monthly" data-hover>Monthly retainer</button>
+  </div>
+
+  <div class="pgrid" id="pgrid" role="tabpanel" aria-labelledby="tab-onetime"></div>
+
+  <div class="careplus" id="careplus" data-reveal>
+    <div>
+      <span class="mono">// Add-on · Standard &amp; Active plans</span>
+      <h3>Care+ FAQ assistant</h3>
+      <div class="amt">+ €89 / month <small>€750 one-time setup</small></div>
+      <p>A small chat box on your site for the questions you already get by email ten times a week. Opening hours, prices, parking, do you take walk-ins. The answers come from a FAQ I write with you. When someone's ready to book, it sends them to your calendar. When it doesn't know the answer, it says so instead of guessing.</p>
+      <div class="foot">Standard and Active retainers only · Limited availability for now · Ask if you'd like a spot</div>
+    </div>
+    <ul>
+      <li>Lives in the bottom corner of your site, in your colours</li>
+      <li>Answers come from a FAQ I write with you</li>
+      <li>Books straight into your calendar</li>
+      <li>I read every month's transcripts and tune it so it doesn't start making things up</li>
+      <li>API and hosting costs come out of the €89, not your card</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ CTA 05 ============ -->
+<section class="section cta" id="contact">
+  <div class="cta-meta">
+    <div class="blk" data-reveal><span class="mono">05 · Get in touch</span><span class="v" style="font-weight:700">Two slots open · Q3 2026</span></div>
+    <div class="blk" data-reveal style="text-align:right"><span class="mono">Usual reply</span><span class="v" style="font-weight:700">Within 24 hours</span></div>
+  </div>
+  <h2><span class="line-mask"><span>Let's <span class="grad-text">talk.</span></span></span></h2>
+  <p class="lede" data-reveal>Send me what you're working on and I'll come back within a day. If I can help, I'll quote you. If I can't, I'll tell you, and usually I know someone who can.</p>
+  <div class="cta-actions" data-reveal>
+    <a class="btn btn-primary" href="/contact" data-hover data-magnetic><span class="fill"></span><span>Start a project →</span></a>
+    <a class="btn btn-ghost" href="mailto:adrian@noxta.studio" data-hover data-magnetic><span class="fill"></span><span>Mail</span></a>
+    <span class="wa">Or WhatsApp <a href="https://wa.me/31617657327" target="_blank" rel="noopener" data-hover style="color:inherit;text-decoration:none"><b>+31 6 17 657 327</b></a> · I read every message</span>
+  </div>
+  <div class="cta-ghost-word">NOXTA</div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div>
+      <div class="wm">NO<span class="x">X</span>TA STUDIO</div>
+      <p>Adrian Tajti. A one-person studio in Tilburg. I work with small businesses, mostly Dutch and Belgian, who want a real person to call when something on their site needs changing.</p>
+    </div>
+    <div class="fl">
+      <span class="mono">// Pages</span>
+      <a href="/portfolio" data-hover>Portfolio</a>
+      <a href="/contact" data-hover>Contact</a>
+      <a href="/website-laten-maken-tilburg" data-hover>Website laten maken — Tilburg</a>
+    </div>
+    <div class="fl">
+      <span class="mono">// Studio</span>
+      <a href="mailto:adrian@noxta.studio" data-hover>adrian@noxta.studio</a>
+      <a href="https://wa.me/31617657327" data-hover>WhatsApp</a>
+      <a href="/privacy" data-hover>Privacy</a>
+      <a href="/terms" data-hover>Terms</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="mono">Studio · Tilburg, NL · Est. 2026</span>
+    <span class="mono">© 2026 Noxta Studio — Hand-coded, no template</span>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="assets/noxta.js"></script>
+<script>
+if(window.gsapReady){
+
+  /* ============ MARQUEES ============ */
+  /* text scrolls left; direction flips when you scroll back up (timeScale = self.direction) */
+  function buildMarquee(bandSel, trackId, item){
+    const track = document.getElementById(trackId);
+    if(!track) return;
+    track.innerHTML = item.repeat(6);
+    if(reduced) return;
+    const half = track.scrollWidth / 2;
+    const tween = gsap.to(track, {x: -half, duration: 26, ease: "none", repeat: -1});
+    ScrollTrigger.create({
+      trigger: bandSel, start: "top bottom", end: "bottom top",
+      onUpdate: self => gsap.to(tween, {timeScale: self.direction, duration: .3})
+    });
+  }
+  buildMarquee("#marquee2", "marqueeTrack2",
+    `<div class="item"><span>Hand-coded</span><span class="sep"></span><em>Built to last</em><span class="sep"></span><span>No templates</span><span class="sep"></span></div>`);
+
+  /* ============ PRICING DATA + TABS ============ */
+  const PRICING = {
+    onetime: [
+      {flag:"",tier:"Tier · I",amount:"€600 – 1,200",name:"Small",desc:"One thing, done well.",feats:["Single landing page or minor redesign","Simple brand mark or wordmark refresh","Up to 600 words of copy I write with you","Basic SEO setup (title, meta, sitemap)","Mobile-first, hand-coded HTML / CSS","One round of revisions"],ideal:"A focused launch page or a one-off redesign for a side project. Usually takes one to two weeks."},
+      {flag:"Recommended",tier:"Tier · II",amount:"€1,200 – 2,000",name:"Mid",desc:"A full site with a real brand.",feats:["Full multi-page website (4–8 pages)","Brand identity: wordmark, palette, type","Copywriting across the site (~2,000 words)","On-page SEO, schema, sitemap","Contact form, analytics, social meta","Two rounds of revisions · 2–4 week turnaround","First 30 days of Standard retainer included"],ideal:"Small businesses without a site, or whose current one is hurting them. Most of my projects land here."},
+      {flag:"",tier:"Tier · III",amount:"€3,500 – 6,000",name:"Large",desc:"Real shops or custom builds.",feats:["WooCommerce or Shopify e-commerce builds","Custom WordPress child theme","Product database setup & import","Payments (IDEAL, Bancontact, card) + shipping","Search, filters, custom mobile UX","Three revision rounds · 6–8 week turnaround","First 30 days of Standard retainer included"],ideal:"Shops with real inventory or custom flows that an off-the-shelf template can't handle. >2,000 SKUs quoted bespoke. VOEP was a Large."}
+    ],
+    monthly: [
+      {flag:"",tier:"Plan · I",amount:"€50 / month",name:"Light",desc:"Kept up to date and safe.",feats:["Uptime monitoring","Weekly automated backups","Security patches & plugin updates","1 hour of edits per month, rolled forward up to 2 months","Email support, 48h reply","Annual prepay · 12 months for the price of 11"],ideal:"Finished sites that just need to stay alive and up to date."},
+      {flag:"Recommended",tier:"Plan · II",amount:"€150 / month",name:"Standard",desc:"Light plus active edits.",feats:["Everything in Light","3 hours of edits per month","Copy tweaks & small layout changes","Monthly performance report","Same-week edits (Mon–Fri)","Annual prepay · 12 months for the price of 11"],ideal:"Sites that change a few times a month: pricing, menu, content updates."},
+      {flag:"",tier:"Plan · III",amount:"€450 / month",name:"Active",desc:"I'm basically on your team.",feats:["Everything in Standard","8 hours of edits per month","Priority response (next business day)","Phone / WhatsApp support (Mon–Fri 9–17, urgent only)","Quarterly strategy call","Annual prepay · 12 months for the price of 11"],ideal:"Growing shops and active marketing: new pages, campaigns, and ongoing work."}
+    ]
+  };
+  const pgrid = document.getElementById("pgrid");
+  function renderPricing(key){
+    pgrid.innerHTML = PRICING[key].map(p => `
+      <div class="pcard ${p.flag ? "is-reco" : ""}">
+        ${p.flag ? `<span class="flag">${p.flag}</span>` : ""}
+        <span class="mono">${p.tier}</span>
+        <div><div class="amount">${p.amount}</div><div class="pname grad-text">${p.name}</div></div>
+        <div class="pdesc">${p.desc}</div>
+        <ul>${p.feats.map(f => `<li>${f}</li>`).join("")}</ul>
+        <div class="ideal">${p.ideal}</div>
+      </div>`).join("");
+    if(!reduced) gsap.fromTo(".pcard",{y:36,opacity:0},{y:0,opacity:1,duration:.7,stagger:.08,ease:"power3.out"});
+  }
+  renderPricing("onetime");
+  document.querySelectorAll(".ptab").forEach(b => b.addEventListener("click", () => {
+    document.querySelectorAll(".ptab").forEach(t => { t.classList.remove("is-active"); t.setAttribute("aria-selected", "false"); });
+    b.classList.add("is-active"); b.setAttribute("aria-selected", "true");
+    pgrid.setAttribute("aria-labelledby", b.id);
+    renderPricing(b.dataset.tab);
+  }));
+
+  /* ============ INTRO ANIMATION (preloader → hero) ============ */
+  const heroChars = document.querySelectorAll("[data-split]").length
+    ? [...document.querySelectorAll("[data-split]")].flatMap(splitChars) : [];
+
+  function runIntro(){
+    const num = document.getElementById("loaderNum");
+    const tl = gsap.timeline({defaults:{ease:"power3.inOut"}});
+    if(reduced){
+      document.getElementById("loader").style.display = "none";
+      gsap.set("[data-reveal], .line-mask > span, .ch", {opacity:1, y:0});
+      ScrollTrigger.refresh();
+      return;
+    }
+    const counter = {v: 0};
+    tl.to(counter, {v: 100, duration: 1.4, ease: "power2.inOut",
+        onUpdate: () => num.textContent = String(Math.round(counter.v)).padStart(3,"0")})
+      .to("#loaderBar", {scaleX: 1, duration: 1.4, ease: "power2.inOut"}, 0)
+      .to("#loader", {yPercent: -100, duration: .9, ease: "power4.inOut",
+        onComplete: () => document.getElementById("loader").style.display = "none"}, "+=.15")
+      .from(heroChars, {yPercent: 110, rotate: 4, duration: 1.1, stagger: .035, ease: "power4.out"}, "-=.45")
+      .from(".hero-visual", {opacity: 0, x: 90, duration: 1.5, ease: "power3.out"}, "-=.95")
+      .from(".hero-avail, .hero-role, .hero-rule, .hero-bio, .hero-ctas .btn, .scroll-cue, .hero .plus",
+        {y: 26, opacity: 0, duration: .8, stagger: .06, ease: "power3.out"}, "-=.7")
+      .add(() => ScrollTrigger.refresh());
+  }
+  if(document.readyState === "complete") runIntro();
+  else window.addEventListener("load", runIntro);
+
+  /* ============ INDEX-SPECIFIC SCROLL ANIMATIONS ============ */
+  if(!reduced){
+    /* work: horizontal pan (intro → Szabina), pinned — desktop only.
+       gsap.matchMedia auto-reverts below 901px → CSS vertical stack. */
+    gsap.matchMedia().add("(min-width: 901px)", () => {
+      const track = document.getElementById("workTrack");
+      if(!track) return;
+      const dist = () => track.scrollWidth - innerWidth;
+      gsap.to(track, {
+        x: () => -dist(),
+        ease: "none",
+        scrollTrigger: {
+          trigger: "#work", start: "top top",
+          end: () => "+=" + dist(),
+          pin: true, scrub: 1, anticipatePin: 1, invalidateOnRefresh: true
+        }
+      });
+    });
+    /* hero parallax out */
+    gsap.to(".hero-name", {yPercent: -10, opacity: .25, ease: "none",
+      scrollTrigger: {trigger: ".hero", start: "bottom 90%", end: "bottom 20%", scrub: true}});
+    gsap.to("#heroImg", {yPercent: 7, ease: "none",
+      scrollTrigger: {trigger: ".hero", start: "bottom 95%", end: "bottom 30%", scrub: true}});
+    /* services card stack scale */
+    const cards = gsap.utils.toArray(".svc-card");
+    cards.forEach((card, i) => {
+      if(i === cards.length - 1) return;
+      gsap.timeline({scrollTrigger: {trigger: cards[i+1], start: "top 80%", end: "top 14vh", scrub: true}})
+        .to(card, {scale: .94, ease: "none"}, 0)
+        .to(card.querySelector(".svc-dim"), {opacity: .68, ease: "none"}, 0);
+    });
+    /* CTA giant word scale-in */
+    gsap.from(".cta h2", {scale: .9, transformOrigin: "0 100%", ease: "none",
+      scrollTrigger: {trigger: ".cta", start: "top bottom", end: "top 30%", scrub: true}});
+  }
+
+  /* ============ EAR ↔ NAV-T ALIGNMENT ============ */
+  /* Pins the head's ear line (measured at 0.692 of the portrait's width)
+     to the right edge of the final T in the nav CTA, at any viewport. */
+  (() => {
+    const img = document.getElementById("heroImg"), cta = document.querySelector(".nav-cta");
+    if(!img || !cta) return;
+    const EAR = 0.692;
+    function align(){
+      if(innerWidth <= 1080) { img.style.right = ""; return; }
+      const c = cta.getBoundingClientRect();
+      const padR = parseFloat(getComputedStyle(cta).paddingRight) || 20;
+      const targetX = c.right - padR - innerWidth * .035;   // a touch left of the nav T
+      const r = img.getBoundingClientRect();
+      if(!r.width) return;
+      // compensate for the intro tween's in-flight translateX on .hero-visual
+      const vis = document.querySelector(".hero-visual");
+      let tx = 0;
+      try { tx = new DOMMatrix(getComputedStyle(vis).transform).m41 || 0; } catch(e){}
+      const earX = r.left - tx + r.width * EAR;              // where the ear settles at x:0
+      const shift = targetX - earX;                          // +ve → move right
+      const cur = parseFloat(getComputedStyle(img).right) || 0;
+      let next = cur - shift;
+      // never reveal a gap on the right edge: image right edge stays >= viewport right
+      const newRightEdge = r.right - tx + shift;
+      if(newRightEdge < innerWidth) next = cur - (innerWidth - r.right);
+      img.style.right = next + "px";
+    }
+    if(img.complete) align(); else img.addEventListener("load", align);
+    window.addEventListener("load", align);
+    let t; addEventListener("resize", () => { clearTimeout(t); t = setTimeout(align, 120); });
+  })();
+
+}
+</script>
+</body>
+</html>
