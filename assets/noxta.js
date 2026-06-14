@@ -33,11 +33,16 @@ if(typeof gsap === "undefined"){
   reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
   isTouch = matchMedia("(hover: none)").matches || innerWidth < 900;
 
+  /* pause ambient FX (ember canvas + cursor trail) while actively scrolling —
+     frees the frame budget for scroll-linked animation (esp. the pinned work pan) */
+  var nxScrolling = false, nxScrollTO;
+  addEventListener("scroll", () => { nxScrolling = true; clearTimeout(nxScrollTO); nxScrollTO = setTimeout(() => nxScrolling = false, 150); }, {passive:true});
+
   /* ============ EMBER CANVAS ============ */
   (() => {
     const c = document.getElementById("embers"); if(!c) return;
     const x = c.getContext("2d");
-    const DPR = Math.min(devicePixelRatio || 1, 1.5);
+    const DPR = Math.min(devicePixelRatio || 1, 1);
     let w, h, parts = [], mx = -9999, my = -9999;
     const N = isTouch ? 32 : 74;
     function size(){ w = c.width = innerWidth * DPR; h = c.height = innerHeight * DPR; c.style.width = innerWidth+"px"; c.style.height = innerHeight+"px"; }
@@ -70,7 +75,7 @@ if(typeof gsap === "undefined"){
     document.addEventListener("visibilitychange", () => running = !document.hidden);
     function tick(){
       requestAnimationFrame(tick);
-      if(reduced || !running) return;
+      if(reduced || !running || nxScrolling) return;
       x.clearRect(0,0,w,h);
       for(const p of parts){
         p.tw += .03;
@@ -102,6 +107,7 @@ if(typeof gsap === "undefined"){
     }
     let scale = 1, sTarget = 1;
     gsap.ticker.add((tk, dt) => {
+      if(nxScrolling) return;
       const f = 1 - Math.pow(1 - .35, dt / 16.67);
       scale += (sTarget - scale) * f;
       dot.style.transform = "translate(" + pos.x + "px," + pos.y + "px) translate(-50%,-50%) scale(" + scale + ")";
