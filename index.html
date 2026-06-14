@@ -191,6 +191,15 @@
   .hpanel + .hpanel{margin-top:9vh}
   .hpanel-cue{display:none}
 }
+/* lite-mode (low-power / throttled GPU): section 02 falls back to vertical — same cards */
+html.lite #work.work-h{height:auto;overflow:visible;padding:14vh 4vw}
+html.lite .work-h-pin{height:auto}
+html.lite .work-h-track{flex-direction:column;width:100%;transform:none!important;will-change:auto}
+html.lite .hpanel{width:100%;height:auto;min-height:0;padding:0;display:block}
+html.lite .hpanel-intro{margin-bottom:9vh}
+html.lite .hpanel + .hpanel{margin-top:9vh}
+html.lite .hpanel-cue{display:none}
+html.lite .work-quotes{position:static;margin-top:2.6rem;max-width:40rem}
 
 /* ---------- marquee ---------- */
 .marquee{position:relative;z-index:2;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:2.2rem 0;overflow:hidden;background:var(--bg-2)}
@@ -673,7 +682,9 @@ if(window.gsapReady){
   if(!reduced){
     /* work: horizontal pan (intro → Szabina), pinned — desktop only.
        gsap.matchMedia auto-reverts below 901px → CSS vertical stack. */
-    gsap.matchMedia().add("(min-width: 901px)", () => {
+    window.__nxWorkMM = gsap.matchMedia();
+    window.__nxWorkMM.add("(min-width: 901px)", () => {
+      if(document.documentElement.classList.contains("lite")) return;  // lite-mode: stay vertical
       const track = document.getElementById("workTrack");
       if(!track) return;
       const dist = () => track.scrollWidth - innerWidth;

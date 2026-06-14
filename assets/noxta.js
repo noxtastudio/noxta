@@ -48,6 +48,8 @@ if(typeof gsap === "undefined"){
     document.documentElement.classList.add("lite");
     var e = document.getElementById("embers"); if(e) e.style.display = "none";
     document.querySelectorAll(".cur-dot,.cur-trail").forEach(el => el.remove());
+    if(window.__nxWorkMM){ try { window.__nxWorkMM.revert(); } catch(_){} }  // un-pin section 02 → vertical
+    if(typeof ScrollTrigger !== "undefined") ScrollTrigger.refresh();
   }
   if(reduced){ goLite(); }
   else addEventListener("load", () => setTimeout(() => {
