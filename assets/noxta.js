@@ -213,11 +213,6 @@ if(typeof gsap === "undefined"){
       gsap.to(el, {yPercent: -100 * parseFloat(el.dataset.parallax) * 4, ease: "none",
         scrollTrigger: {trigger: el, start: "top bottom", end: "bottom top", scrub: true}});
     });
-    /* screenshot parallax inside framed shots */
-    document.querySelectorAll(".work-shot img[data-shot]").forEach(img => {
-      gsap.fromTo(img, {yPercent: -8}, {yPercent: 0, ease: "none",
-        scrollTrigger: {trigger: img.closest(".work-shot"), start: "top bottom", end: "bottom top", scrub: true}});
-    });
   }
 
   /* ============ COUNT-UP NUMBERS ([data-count]) ============ */
