@@ -38,6 +38,28 @@ if(typeof gsap === "undefined"){
   var nxScrolling = false, nxScrollTO;
   addEventListener("scroll", () => { nxScrolling = true; clearTimeout(nxScrollTO); nxScrollTO = setTimeout(() => nxScrolling = false, 150); }, {passive:true});
 
+  /* ---- adaptive lite-mode: keep the horizontal scroll, drop the per-frame GPU FX ----
+     If a session can't sustain ~45fps with the FX on (Low Power Mode, weak GPU, thermal
+     throttle), swap the animated ember canvas → static glow and the custom cursor → native.
+     The pinned horizontal scroll stays. */
+  var liteMode = false;
+  function goLite(){
+    if(liteMode) return; liteMode = true;
+    document.documentElement.classList.add("lite");
+    var e = document.getElementById("embers"); if(e) e.style.display = "none";
+    document.querySelectorAll(".cur-dot,.cur-trail").forEach(el => el.remove());
+  }
+  if(reduced){ goLite(); }
+  else addEventListener("load", () => setTimeout(() => {
+    var n = 0, sum = 0, last = performance.now();
+    (function probe(t){
+      if(document.hidden) return;                      // tab backgrounded → don't misjudge
+      var dt = t - last; last = t; if(n++) sum += dt;  // skip the first delta
+      if(n < 60){ requestAnimationFrame(probe); return; }
+      if(sum / (n - 1) > 22) goLite();                 // avg frame >22ms ≈ <45fps sustained
+    })(performance.now());
+  }, 1200));
+
   /* ============ EMBER CANVAS ============ */
   (() => {
     const c = document.getElementById("embers"); if(!c) return;
@@ -76,7 +98,7 @@ if(typeof gsap === "undefined"){
     let _emberLast = 0;
     function tick(t){
       requestAnimationFrame(tick);
-      if(reduced || !running || nxScrolling) return;
+      if(reduced || !running || nxScrolling || liteMode) return;
       if(t - _emberLast < 33) return;   // cap embers ~30fps — slow drift, frees the frame for cursor + scroll
       _emberLast = t;
       x.clearRect(0,0,w,h);
@@ -110,7 +132,7 @@ if(typeof gsap === "undefined"){
     }
     let scale = 1, sTarget = 1;
     gsap.ticker.add((tk, dt) => {
-      if(nxScrolling) return;
+      if(nxScrolling || liteMode) return;
       const f = 1 - Math.pow(1 - .35, dt / 16.67);
       scale += (sTarget - scale) * f;
       dot.style.transform = "translate(" + pos.x + "px," + pos.y + "px) translate(-50%,-50%) scale(" + scale + ")";
