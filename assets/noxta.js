@@ -44,7 +44,7 @@ if(typeof gsap === "undefined"){
     const x = c.getContext("2d");
     const DPR = Math.min(devicePixelRatio || 1, 1);
     let w, h, parts = [], mx = -9999, my = -9999;
-    const N = isTouch ? 32 : 74;
+    const N = isTouch ? 22 : 40;
     function size(){ w = c.width = innerWidth * DPR; h = c.height = innerHeight * DPR; c.style.width = innerWidth+"px"; c.style.height = innerHeight+"px"; }
     size(); addEventListener("resize", size);
     /* pre-rendered glow sprites — drawImage is ~20x cheaper than per-frame shadowBlur */
@@ -73,9 +73,12 @@ if(typeof gsap === "undefined"){
     const R = 130*DPR, R2 = R*R;
     let running = true;
     document.addEventListener("visibilitychange", () => running = !document.hidden);
-    function tick(){
+    let _emberLast = 0;
+    function tick(t){
       requestAnimationFrame(tick);
       if(reduced || !running || nxScrolling) return;
+      if(t - _emberLast < 33) return;   // cap embers ~30fps — slow drift, frees the frame for cursor + scroll
+      _emberLast = t;
       x.clearRect(0,0,w,h);
       for(const p of parts){
         p.tw += .03;
