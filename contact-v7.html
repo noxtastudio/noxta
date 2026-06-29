@@ -156,7 +156,6 @@ a.fact:hover .v{color:var(--orange)}
 .faq-item summary .ic::after{width:1.5px;height:16px;transform:translate(-50%,-50%)}
 .faq-item[open] summary .ic{transform:rotate(135deg)}
 .faq-item p{line-height:1.75;max-width:64ch;padding:0 0 1.9rem;font-size:1.02rem;opacity:.78}
-#faq .h-mega .w{display:inline-block;will-change:transform}
 
 /* ===== ASK RULE + FOOTER (index-v7, themed for ink) ===== */
 .ask__rule{height:2px;background:rgba(14,10,6,.22);margin-top:clamp(60px,8vh,110px)}
@@ -185,45 +184,18 @@ a.fact:hover .v{color:var(--orange)}
 @media(prefers-reduced-motion:reduce){
   .reveal{opacity:1!important;transform:none!important}
 }
-
-/* ===== PAGE TRANSITION — "ignite mini" cover (shared across pages) =====
-   A grey panel rises to cover on exit; on the next page it ignites grey→orange
-   (thin→bold NOXTA) and wipes up to reveal. CSS-driven so it behaves the same
-   on every page and survives a GSAP load failure. */
-.ptrans{
-  position:fixed;inset:0;z-index:120;display:grid;place-items:center;
-  background:#e9e8e4;color:#5f5d58;pointer-events:none;transform:translateY(100%);
-  transition:transform .45s cubic-bezier(.76,0,.24,1),background-color .5s ease,color .5s ease;
-  will-change:transform;
-}
-.ptrans__word{
-  font-family:var(--font-display);font-weight:300;text-transform:uppercase;
-  font-size:clamp(2.5rem,12vw,11rem);letter-spacing:.02em;line-height:1;
-  transition:font-weight .5s ease,color .5s ease;
-}
-html.tcover .ptrans{transform:translateY(0)}
-.ptrans.is-lit{background:#ff5a1f;color:#0e0a06}
-.ptrans.is-lit .ptrans__word{font-weight:700}
-html.is-loading{overflow:hidden}
-@media(prefers-reduced-motion:reduce){.ptrans{display:none!important}}
 </style>
-<!-- Page-transition gate: if we arrived via an internal link, cover at first
-     paint (tcover) so there's no flash before the ignite reveal. -->
-<script>try{var h=document.documentElement;if(sessionStorage.getItem('noxtaPT')==='1'){sessionStorage.removeItem('noxtaPT');if(!(window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches)){h.classList.add('tcover','is-loading');}}}catch(e){}</script>
 </head>
 <body>
 
-<!-- ===================== PAGE TRANSITION ===================== -->
-<div class="ptrans" id="ptrans" aria-hidden="true"><span class="ptrans__word">NOXTA</span></div>
-
 <!-- ===================== NAV ===================== -->
 <nav class="nav" id="nav">
-  <a href="index.html" class="nav__logo">NOXTA</a>
+  <a href="/" class="nav__logo">NOXTA</a>
   <span class="nav__dash"></span>
   <div class="nav__links">
-    <a href="index.html#work">Work</a>
-    <a href="index.html#about">About</a>
-    <a href="index.html#pricing">Pricing</a>
+    <a href="/#work">Work</a>
+    <a href="/#about">About</a>
+    <a href="/#pricing">Pricing</a>
     <a href="#contact-form" class="nav__cta">Contact</a>
   </div>
 </nav>
@@ -340,7 +312,7 @@ html.is-loading{overflow:hidden}
 <!-- ===================== FAQ ===================== -->
 <section class="wrap sec" id="faq" style="padding-top:0">
   <div class="sec__kicker mono reveal"><span>Common questions</span><span class="ln"></span></div>
-  <h2 class="h-mega reveal"><span class="w">Things</span> <span class="w">people</span><br><span class="w accent">usually</span> <span class="w accent">ask.</span></h2>
+  <h2 class="h-mega reveal">Things people<br><span class="accent">usually ask.</span></h2>
 
   <div class="faq-list reveal">
     <details class="faq-item">
@@ -372,15 +344,13 @@ html.is-loading{overflow:hidden}
   <div class="foot__logo">NOXTA</div>
   <nav class="foot__nav">
     <div class="foot__col">
-      <a href="index.html#work"><span>01</span> Work</a>
-      <a href="index.html#services"><span>02</span> Services</a>
-      <a href="index.html#about"><span>03</span> About</a>
+      <a href="/#work"><span>01</span> Work</a>
+      <a href="/#services"><span>02</span> Services</a>
+      <a href="/#about"><span>03</span> About</a>
     </div>
     <div class="foot__col">
-      <a href="index.html#pricing"><span>04</span> Pricing</a>
+      <a href="/#pricing"><span>04</span> Pricing</a>
       <a href="#contact-form"><span>05</span> Contact</a>
-      <a href="privacy.html"><span>06</span> Privacy</a>
-      <a href="terms.html"><span>07</span> Terms</a>
     </div>
   </nav>
   <div class="foot__social">
@@ -519,58 +489,18 @@ html.is-loading{overflow:hidden}
   /* FAQ — kicker, then the heading wipes up bold, then the questions charge in
      one at a time from the left. */
   gsap.set("#faq .sec__kicker", {opacity:0, y:16});
-  gsap.set("#faq .h-mega", {opacity:1});
-  gsap.set("#faq .h-mega .w", {opacity:0, yPercent:60});
+  gsap.set("#faq .h-mega", {opacity:0, y:40, clipPath:"inset(0 0 100% 0)"});
   gsap.set("#faq .faq-list", {opacity:1});
   gsap.set("#faq .faq-item", {opacity:0, x:-48});
   reveal(document.getElementById("faq"), gsap.timeline({paused:true})
     .to("#faq .sec__kicker", {opacity:1, y:0, duration:.5, ease:"power2.out"})
-    .to("#faq .h-mega .w", {opacity:1, yPercent:0, duration:.7, stagger:.1, ease:"power4.out"}, "-=.2")
-    .to("#faq .faq-item", {opacity:1, x:0, duration:.55, stagger:.1, ease:"power3.out"}, "-=.25")
+    .to("#faq .h-mega", {opacity:1, y:0, clipPath:"inset(0 0 0% 0)", duration:.8, ease:"power3.out"}, "-=.2")
+    .to("#faq .faq-item", {opacity:1, x:0, duration:.55, stagger:.1, ease:"power3.out"}, "-=.3")
   );
 
-  /* FAQ accordion — take over the native <details> toggle to animate the panel
-     open/closed with the +/× icon rotating in sync. Native <details> stays the
-     semantics + the no-JS / reduced-motion fallback.
-     Height AND padding are collapsed together: with box-sizing:border-box a box
-     can't shrink below its own padding, so animating height alone leaves a ~30px
-     floor that "snaps" at the start — that hitch is what reads as stutter.
-     Collapsing the padding too lets the panel grow cleanly from a true zero. */
-  gsap.utils.toArray("#faq .faq-item").forEach(function(item){
-    var summary = item.querySelector("summary");
-    var panel   = item.querySelector("p");
-    var icon    = item.querySelector(".ic");
-    if(!summary || !panel) return;
-    gsap.set(panel, {overflow:"hidden", willChange:"height"});
-    if(icon) icon.style.transition = "none";          // GSAP owns the icon now
-    var expanded = false, tween;
-    summary.addEventListener("click", function(e){
-      e.preventDefault();
-      if(tween) tween.kill();
-      expanded = !expanded;
-      if(expanded){
-        item.open = true;
-        gsap.set(panel, {height:"auto", clearProps:"paddingBottom"});
-        var h = panel.offsetHeight;                              // full, incl. padding
-        var pad = parseFloat(getComputedStyle(panel).paddingBottom) || 0;
-        tween = gsap.timeline({defaults:{ease:"power2.out"}});
-        tween.fromTo(panel, {height:0, paddingBottom:0, opacity:0},
-          {height:h, paddingBottom:pad, opacity:.78, duration:.5,
-           onComplete:function(){ gsap.set(panel, {height:"auto"}); }}, 0);
-        if(icon) tween.to(icon, {rotate:135, duration:.45}, 0);
-      } else {
-        tween = gsap.timeline({defaults:{ease:"power2.inOut"}});
-        tween.to(panel, {height:0, paddingBottom:0, opacity:0, duration:.38,
-          onComplete:function(){ item.open = false; gsap.set(panel, {clearProps:"height,paddingBottom,opacity"}); }}, 0);
-        if(icon) tween.to(icon, {rotate:0, duration:.38}, 0);
-      }
-    });
-  });
-
-  /* Signature: scroll-velocity skew on the hero headline only — it leans into
-     your scroll and springs back to true, like the index-v7 hero word. The FAQ
-     heading deliberately stays still (its signature is the per-word rise). */
-  var skewEls = gsap.utils.toArray(".ask__big");
+  /* Signature: scroll-velocity skew on the big display type — it leans into your
+     scroll and springs back to true, exactly like the index-v7 hero word. */
+  var skewEls = gsap.utils.toArray(".ask__big, #faq .h-mega");
   if(skewEls.length){
     var skewClamp = gsap.utils.clamp(-4, 4);
     var skewProxy = {s:0};
@@ -588,71 +518,6 @@ html.is-loading{overflow:hidden}
   }
 
   ScrollTrigger.refresh();
-})();
-</script>
-
-<!-- ===================== PAGE TRANSITION ===================== -->
-<script>
-(function(){
-  "use strict";
-  var pt = document.getElementById("ptrans");
-  if(!pt) return;
-  var docEl = document.documentElement;
-  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  /* ENTER — only when we arrived via an internal transition (tcover set in the
-     <head> before first paint). Home = quick reveal; other pages = ignite. */
-  if(docEl.classList.contains("tcover") && !reduce){
-    var isHome = /index\.html$/.test(location.pathname) || location.pathname === "/" || /\/$/.test(location.pathname);
-    var finished = false;
-    var finish = function(){ if(finished) return; finished = true; pt.style.display = "none"; docEl.classList.remove("is-loading"); };
-    var wipe = function(){
-      pt.style.transform = "translateY(-100%)";
-      docEl.classList.remove("tcover");
-      pt.addEventListener("transitionend", function te(ev){ if(ev.propertyName === "transform"){ pt.removeEventListener("transitionend", te); finish(); } });
-      setTimeout(finish, 900);
-    };
-    requestAnimationFrame(function(){
-      if(isHome){ wipe(); }                                       // quick reveal
-      else { pt.classList.add("is-lit"); setTimeout(wipe, 520); } // ignite, then reveal
-    });
-  }
-
-  /* EXIT — cover, then navigate, on a click to a DIFFERENT internal .html page. */
-  if(!reduce){
-    var isInternal = function(a){
-      if(a.target === "_blank" || a.hasAttribute("download")) return false;
-      var url; try{ url = new URL(a.href, location.href); }catch(e){ return false; }
-      if(url.origin !== location.origin) return false;
-      if(!/\.html$/.test(url.pathname)) return false;
-      if(url.pathname === location.pathname) return false;        // same page (#anchor) — let it scroll
-      return true;
-    };
-    document.addEventListener("click", function(e){
-      if(e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-      var a = e.target.closest ? e.target.closest("a[href]") : null;
-      if(!a || !isInternal(a)) return;
-      e.preventDefault();
-      var href = a.getAttribute("href");
-      try{ sessionStorage.setItem("noxtaPT", "1"); }catch(_){}
-      docEl.classList.add("is-loading");
-      pt.style.transform = "translateY(0)";                       // grey cover rises
-      var went = false, go = function(){ if(went) return; went = true; window.location.href = href; };
-      pt.addEventListener("transitionend", function te(ev){ if(ev.propertyName === "transform"){ pt.removeEventListener("transitionend", te); go(); } });
-      setTimeout(go, 650);
-    });
-  }
-
-  /* bfcache: returning to a page left mid-cover resets it. */
-  window.addEventListener("pageshow", function(e){
-    if(e.persisted){
-      pt.style.transition = "none";
-      pt.style.transform = "translateY(100%)";
-      pt.style.display = "";
-      docEl.classList.remove("is-loading", "tcover");
-      requestAnimationFrame(function(){ pt.style.transition = ""; });
-    }
-  });
 })();
 </script>
 </body>

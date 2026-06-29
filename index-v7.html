@@ -90,8 +90,9 @@ section{position:relative}
   display:flex;align-items:center;justify-content:flex-start;gap:34px;
   padding:28px var(--pad);
   color:var(--fg);
-  transition:color .5s ease;
+  transition:color .5s ease, transform .35s ease;
 }
+.nav.is-hidden{transform:translateY(-100%)}
 .nav__logo{font-family:var(--font-display);font-weight:700;font-size:2.1rem;letter-spacing:-.02em;line-height:1}
 .nav__dash{width:84px;height:2px;background:currentColor;opacity:.55;flex:none}
 .nav__links{display:flex;gap:36px;align-items:center}
@@ -159,22 +160,29 @@ section{position:relative}
 .sec__kicker .ln{flex:1;height:1px;background:currentColor;opacity:.25}
 .h-mega{font-family:var(--font-display);font-weight:700;text-transform:uppercase;
   font-size:clamp(3rem,11vw,11rem);line-height:.84;letter-spacing:-.02em}
+/* "No agency games." is the longest h-mega line and can't fit at 11vw, so it
+   wrapped and orphaned "NO". Cap this headline so both intended lines fit. */
+#about .h-mega{font-size:clamp(1.5rem,8vw,8.4rem);white-space:nowrap}
 
-/* ===== MIRROR (the drop) ============================================= */
-.mirror{padding:clamp(120px,20vh,240px) 0;text-align:left}
-.mirror__small{font-family:var(--font-display);font-weight:300;text-transform:uppercase;
-  font-size:clamp(2.4rem,7vw,6rem);line-height:.92;letter-spacing:-.01em;
-  font-variation-settings:"wght" var(--wght);}
-.mirror__snap{font-family:var(--font-display);font-weight:700;text-transform:uppercase;
-  font-size:clamp(2.8rem,9vw,8.5rem);line-height:.86;letter-spacing:-.02em;
-  margin-top:.15em;color:var(--ink);}
-.mirror__sub{margin-top:42px;max-width:30ch;font-size:1.15rem;opacity:.8}
+/* ===== PIVOT — pinned transformation set-piece ====================== */
+.pivot{position:relative;height:100svh;overflow:hidden}
+.pivot__phase{position:absolute;inset:0;display:flex;align-items:center;will-change:transform,opacity}
+.pivot__solution{opacity:0}
+.pivot__eyebrow{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;opacity:.7;margin-bottom:26px}
+.pivot__thin{font-family:var(--font-display);font-weight:300;text-transform:uppercase;
+  font-size:clamp(2.2rem,6.5vw,5.5rem);line-height:.95;letter-spacing:-.01em}
+.pivot__heavy{font-family:var(--font-display);font-weight:700;text-transform:uppercase;
+  font-size:clamp(2.8rem,9vw,8.5rem);line-height:.86;letter-spacing:-.02em;margin-top:.1em}
+.pivot__heavy--lg{font-size:clamp(2.8rem,8.2vw,7.8rem);max-width:15ch}
+.pivot__problem .pivot__heavy{color:#181109}
+.pivot__sub{margin-top:34px;max-width:34ch;font-size:1.15rem;opacity:.82}
+/* mobile / reduced-motion: no pin — stack the two phases as solid blocks */
+.pivot.is-static{height:auto}
+.pivot.is-static .pivot__phase{position:relative;inset:auto;opacity:1!important;transform:none!important;padding:clamp(90px,15vh,160px) 0}
+.pivot.is-static .pivot__problem{background:#e9e8e4;color:#6f6e69}
+.pivot.is-static .pivot__solution{background:#ff5a1f;color:#0e0a06}
 
 /* ===== TURN (services) =============================================== */
-.turn__statement{font-family:var(--font-display);font-weight:700;text-transform:uppercase;
-  font-size:clamp(2.6rem,8vw,7.5rem);line-height:.86;letter-spacing:-.02em;max-width:16ch;
-  font-variation-settings:"wght" var(--wght);}
-.turn__statement small{display:block;font-size:.32em;font-weight:500;opacity:.62;margin-top:.5em;letter-spacing:.01em}
 .svc{margin-top:clamp(50px,7vh,90px);border-top:2px solid var(--line)}
 .svc__row{display:grid;grid-template-columns:1.1fr 2.4fr 3fr auto;gap:24px;align-items:center;
   padding:30px 0;border-bottom:2px solid var(--line);transition:padding-left .35s, background .35s}
@@ -187,15 +195,40 @@ section{position:relative}
 @media(max-width:880px){.svc__row{grid-template-columns:auto 1fr auto;gap:14px}.svc__desc{display:none}}
 
 /* ===== PROOF (real testimonials) ===================================== */
-.proof__quotes{display:grid;grid-template-columns:1fr 1fr;gap:clamp(34px,5vw,72px);margin-top:clamp(50px,7vh,90px)}
-@media(max-width:880px){.proof__quotes{grid-template-columns:1fr;gap:54px}}
-.quote{border-top:3px solid var(--accent);padding-top:30px}
-.quote__pull{font-family:var(--font-display);font-weight:700;text-transform:uppercase;
-  font-size:clamp(1.9rem,4.4vw,3.4rem);line-height:.95;letter-spacing:-.015em;color:var(--accent)}
-.quote__body{margin-top:24px;font-size:1.05rem;line-height:1.55;opacity:.85}
-.quote__og{margin-top:14px;font-size:.92rem;opacity:.5;font-style:italic}
-.quote__who{margin-top:22px;font-family:var(--font-mono);font-size:.74rem;letter-spacing:.18em;text-transform:uppercase;opacity:.7}
-.proof__line{margin-top:clamp(60px,9vh,110px);font-size:1.25rem;max-width:40ch;opacity:.7}
+.workx{position:relative;height:100svh;overflow:hidden}
+.workx__track{display:flex;height:100%;width:max-content}
+.workx__panel{flex:0 0 100vw;height:100%;display:flex;align-items:center;gap:clamp(36px,5vw,84px);padding:0 var(--pad)}
+.workx__textwrap{max-width:var(--maxw)}
+.workx__hint{margin-top:34px;opacity:.45;letter-spacing:.22em;font-size:.7rem}
+.workx__panel--outro{justify-content:space-between}
+.workx__outro-text{max-width:48%}
+.workx__outro-text .workx__hint{margin-top:0;margin-bottom:18px}
+.workx__outro-head{font-family:var(--font-display);font-weight:700;text-transform:uppercase;font-size:clamp(2.3rem,4.4vw,4rem);line-height:.96;letter-spacing:-.02em;margin-bottom:24px}
+.workx__outro-note{font-size:1.05rem;line-height:1.5;opacity:.72;max-width:36ch}
+.workx__outro-cta{margin-top:30px}
+.workx__outro-circle{flex:none;width:clamp(96px,11vw,190px);height:clamp(96px,11vw,190px);border-radius:50%;background:var(--accent);color:var(--bg);display:grid;place-items:center;font-size:clamp(2.2rem,3.6vw,4rem);transition:transform .35s}
+.workx__outro-circle:hover{transform:scale(1.05)}
+@media(max-width:880px){.workx__outro-circle{display:none}.workx__outro-text{max-width:100%}}
+.workx__shot{flex:1 1 56%;max-width:58%;aspect-ratio:16/10;overflow:hidden;border:1px solid var(--line);border-radius:3px;background:#0b0b0b;display:block}
+.workx__shot img{width:100%;height:100%;object-fit:contain;object-position:center;transition:transform .7s cubic-bezier(.16,1,.3,1)}
+.workx__shot:hover img{transform:scale(1.04)}
+.workx__info{flex:1 1 38%;max-width:460px}
+.workx__index{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.22em;opacity:.5}
+.workx__name{font-family:var(--font-display);font-weight:700;text-transform:uppercase;font-size:clamp(2.4rem,5vw,4.6rem);line-height:.95;margin-top:14px}
+.workx__role{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;opacity:.5;margin-top:14px}
+.workx__quote{font-size:clamp(1.1rem,1.5vw,1.4rem);line-height:1.45;margin-top:26px;opacity:.92}
+.workx__who{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;opacity:.7;margin-top:22px}
+.workx__links{display:flex;gap:30px;margin-top:30px;align-items:center;flex-wrap:wrap}
+.workx__url,.workx__study{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-display);font-weight:600;text-transform:uppercase;font-size:.92rem;transition:gap .25s,opacity .2s}
+.workx__url{opacity:.85}.workx__url:hover{opacity:1}
+.workx__study{color:var(--accent)}.workx__study:hover{gap:14px}
+/* mobile / reduced-motion: no pin — stack the panels vertically */
+.workx.is-static{height:auto;overflow:visible}
+.workx.is-static .workx__track{flex-direction:column;width:auto;height:auto}
+.workx.is-static .workx__panel{flex:none;width:auto;height:auto;min-height:0;flex-direction:column;align-items:flex-start;gap:26px;padding:clamp(40px,7vh,72px) 0}
+.workx.is-static .workx__shot{max-width:100%;flex:none;width:100%}
+.workx.is-static .workx__info{max-width:100%}
+.proof__line{font-size:1.25rem;max-width:40ch;opacity:.7}
 .proof__line b{color:var(--accent);font-weight:600;opacity:1}
 
 /* ===== PROMISE (de-risk + founder) =================================== */
@@ -220,7 +253,7 @@ section{position:relative}
 .toggle button.is-active{background:var(--accent);color:var(--bg)}
 .tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:clamp(38px,5vh,64px)}
 @media(max-width:980px){.tiers{grid-template-columns:1fr}}
-.tier{border:2px solid var(--line);background:rgba(250,243,232,.04);padding:30px 26px;display:flex;flex-direction:column;border-radius:2px;position:relative}
+.tier{border:2px solid rgba(250,243,232,.22);background:rgba(250,243,232,.04);padding:30px 26px;display:flex;flex-direction:column;border-radius:2px;position:relative}
 .tier.rec{border-color:var(--accent)}
 .tier__badge{position:absolute;top:-13px;right:18px;background:var(--accent);color:var(--bg);font-family:var(--font-mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;padding:5px 11px}
 .tier__label{font-family:var(--font-mono);font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;opacity:.55}
@@ -245,7 +278,7 @@ section{position:relative}
 .ask__inner{position:relative}
 .ask__big{font-family:var(--font-display);font-weight:700;text-transform:uppercase;
   font-size:clamp(4.5rem,21vw,21rem);line-height:.8;letter-spacing:-.03em}
-.ask__circle{position:absolute;right:0;top:clamp(20px,9vh,110px);
+.ask__circle{position:absolute;right:var(--pad);top:clamp(20px,9vh,110px);
   width:clamp(96px,11vw,190px);height:clamp(96px,11vw,190px);border-radius:50%;
   background:var(--ink);color:var(--orange);display:grid;place-items:center;
   font-size:clamp(2.2rem,3.6vw,4rem);transition:transform .3s}
@@ -253,7 +286,8 @@ section{position:relative}
 .ask__row{display:flex;flex-wrap:wrap;align-items:center;gap:22px 40px;margin-top:clamp(28px,4vh,54px)}
 .ask__mail{display:inline-flex;align-items:center;gap:14px;font-family:var(--font-display);font-weight:600;text-transform:uppercase;font-size:clamp(1.3rem,2.6vw,2.4rem);transition:opacity .25s}
 .ask__mail:hover{opacity:.72}
-.ask__mailicon{display:grid;place-items:center;width:1.7em;height:1.35em;border:2px solid var(--ink);font-size:.5em;border-radius:3px}
+.ask__mailicon{display:grid;place-items:center;width:.95em;color:var(--ink)}
+.ask__mailicon svg{width:100%;height:auto;display:block}
 .btn-pill{display:inline-flex;align-items:center;gap:12px;background:var(--ink);color:var(--orange);
   font-family:var(--font-display);font-weight:600;text-transform:uppercase;font-size:1.05rem;
   padding:16px 32px;border-radius:100px;transition:transform .3s}
@@ -315,7 +349,7 @@ section{position:relative}
   <div class="hero__new display">NEW</div>
   <div class="hero__intro">
     <h1 class="hero__tagline">Websites that<br>make people feel<br>something.</h1>
-    <a href="#mirror" class="hero__arrow" aria-label="Scroll">&#8594;</a>
+    <a href="#pivot" class="hero__arrow" aria-label="Scroll">&#8594;</a>
   </div>
   <div class="hero__create">Create</div>
   <div class="marquee" aria-hidden="true">
@@ -325,13 +359,21 @@ section{position:relative}
   </div>
 </section>
 
-<!-- ===================== MIRROR (the drop) ===================== -->
-<section class="mirror" id="mirror" data-theme="dead">
-  <div class="wrap">
-    <p class="eyebrow reveal">A hard truth first</p>
-    <h2 class="mirror__small reveal" id="mirrorWord">Your business is good.</h2>
-    <h2 class="mirror__snap reveal">Your website<br>says otherwise.</h2>
-    <p class="mirror__sub reveal">Right now, your brand makes you look smaller than you are. The proposal lands, they check the site, and it quietly undercuts your price.</p>
+<!-- ============ PIVOT — the pinned transformation set-piece ============ -->
+<section id="pivot" class="pivot">
+  <div class="pivot__phase pivot__problem">
+    <div class="wrap">
+      <p class="pivot__eyebrow">A hard truth first</p>
+      <h2 class="pivot__thin">Your business is good.</h2>
+      <h2 class="pivot__heavy">Your website<br>says otherwise.</h2>
+      <p class="pivot__sub">Right now, your brand makes you look smaller than you are.</p>
+    </div>
+  </div>
+  <div class="pivot__phase pivot__solution">
+    <div class="wrap">
+      <h2 class="pivot__heavy pivot__heavy--lg">We make you look<br>as good as you actually are.</h2>
+      <p class="pivot__sub">Impossible to ignore. On purpose.</p>
+    </div>
   </div>
 </section>
 
@@ -339,8 +381,7 @@ section{position:relative}
 <section class="sec turn" id="services" data-theme="orange">
   <div class="wrap">
     <div class="sec__kicker mono reveal"><span>What we do</span><span class="ln"></span></div>
-    <h2 class="turn__statement reveal" id="turnWord">We make you look as good as you actually are.
-      <small>Impossible to ignore. On purpose.</small></h2>
+    <h2 class="h-mega reveal">Everything,<br>end to end.</h2>
 
     <div class="svc">
       <a class="svc__row reveal" href="#contact">
@@ -371,28 +412,64 @@ section{position:relative}
   </div>
 </section>
 
-<!-- ===================== PROOF (real testimonials) ===================== -->
-<section class="sec proof" id="work" data-theme="ink">
-  <div class="wrap">
-    <div class="sec__kicker mono reveal"><span>Don't take our word for it</span><span class="ln"></span></div>
-    <h2 class="h-mega reveal">Real people.<br>Real results.</h2>
+<!-- ============ PROOF — pinned horizontal one-by-one showcase ============ -->
+<section class="proof" id="work" data-theme="ink">
+  <div class="workx" aria-label="Selected work — scroll to advance">
+    <div class="workx__track">
 
-    <div class="proof__quotes">
-      <blockquote class="quote reveal">
-        <p class="quote__pull">&ldquo;Now it looks as professional as I always pictured.&rdquo;</p>
-        <p class="quote__body">Started with no experience, just an idea. My website now has the professional look I ultimately had in mind, thanks to Adrian&rsquo;s ideas and help.</p>
-        <p class="quote__og">&ldquo;Mijn website heeft nu een professionele uitstraling zoals ik het uiteindelijk voor ogen had.&rdquo;</p>
-        <p class="quote__who">Alex &mdash; Business owner</p>
-      </blockquote>
+      <div class="workx__panel workx__panel--text">
+        <div class="workx__textwrap">
+          <div class="sec__kicker mono"><span>Selected work</span><span class="ln"></span></div>
+          <h2 class="h-mega">Real people.<br>Real results.</h2>
+          <p class="workx__hint mono">Two real builds &middot; keep scrolling &#8594;</p>
+        </div>
+      </div>
 
-      <blockquote class="quote reveal">
-        <p class="quote__pull">&ldquo;He could build anything I asked for, personalized for me.&rdquo;</p>
-        <p class="quote__body">I was out of ideas; Adrian gave me plenty for the start. Communication was super fast, easy-going and professional. He fine-tuned every request, giving me no worries, but an enjoyable time.</p>
-        <p class="quote__who">Szabina &mdash; Hobby photographer</p>
-      </blockquote>
+      <article class="workx__panel">
+        <a class="workx__shot" href="https://szabina.studio" target="_blank" rel="noopener">
+          <img src="szabina-screenshot.webp" alt="Szabina — cinematic travel journal built by Noxta" loading="lazy" />
+        </a>
+        <div class="workx__info">
+          <span class="workx__index">01 — 02</span>
+          <h3 class="workx__name">Szabina</h3>
+          <p class="workx__role">Cinematic travel journal &middot; Self-editing</p>
+          <p class="workx__quote">&ldquo;He could build anything I asked for, personalized for me. Fast, easy-going, professional.&rdquo;</p>
+          <p class="workx__who">Szabina &mdash; Hobby photographer</p>
+          <div class="workx__links">
+            <a class="workx__url" href="https://szabina.studio" target="_blank" rel="noopener">View site &#8599;</a>
+            <a class="workx__study" href="#work">Read case study &#8594;</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="workx__panel">
+        <a class="workx__shot" href="https://voep.nl" target="_blank" rel="noopener">
+          <img src="voep-screenshot.webp" alt="VOEP — vintage outboard parts shop built by Noxta" loading="lazy" />
+        </a>
+        <div class="workx__info">
+          <span class="workx__index">02 — 02</span>
+          <h3 class="workx__name">VOEP</h3>
+          <p class="workx__role">Vintage marine e-commerce &middot; WooCommerce</p>
+          <p class="workx__quote">&ldquo;Now it looks as professional as I always pictured &mdash; thanks to Adrian&rsquo;s ideas and help.&rdquo;</p>
+          <p class="workx__who">Alex &mdash; Owner</p>
+          <div class="workx__links">
+            <a class="workx__url" href="https://voep.nl" target="_blank" rel="noopener">voep.nl &#8599;</a>
+            <a class="workx__study" href="#work">Read case study &#8594;</a>
+          </div>
+        </div>
+      </article>
+
+      <div class="workx__panel workx__panel--outro">
+        <div class="workx__outro-text">
+          <p class="workx__hint mono">That&rsquo;s the work. Here&rsquo;s the pitch.</p>
+          <h3 class="workx__outro-head">The site you&rsquo;re<br>scrolling is the proof.</h3>
+          <p class="workx__outro-note">New studio, obsessed with the craft. If it made you feel something, that&rsquo;s the whole pitch.</p>
+          <a class="workx__study workx__outro-cta" href="mailto:adrian@noxta.studio?subject=Start%20a%20project">Start a project &#8594;</a>
+        </div>
+        <a class="workx__outro-circle" href="mailto:adrian@noxta.studio?subject=Start%20a%20project" aria-label="Start a project">&#8594;</a>
+      </div>
+
     </div>
-
-    <p class="proof__line reveal">New studio. Obsessed with the craft. <b>The site you&rsquo;re scrolling is the proof</b> — if it made you feel something, that&rsquo;s the whole pitch.</p>
   </div>
 </section>
 
@@ -449,7 +526,7 @@ section{position:relative}
     <h2 class="ask__big reveal">Let&rsquo;s build.</h2>
     <a href="mailto:adrian@noxta.studio?subject=Start%20a%20project" class="ask__circle reveal" aria-label="Start a project">&#8594;</a>
     <div class="ask__row reveal">
-      <a href="mailto:adrian@noxta.studio" class="ask__mail"><span class="ask__mailicon">&#10033;</span>adrian@noxta.studio</a>
+      <a href="mailto:adrian@noxta.studio" class="ask__mail"><span class="ask__mailicon"><svg viewBox="0 0 24 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><rect x="1" y="1" width="22" height="16" rx="1.5"/><path d="M1.5 2.5 12 10 22.5 2.5"/></svg></span>adrian@noxta.studio</a>
       <a href="mailto:adrian@noxta.studio?subject=Start%20a%20project" class="btn-pill">Start a project &#8599;</a>
     </div>
   </div>
@@ -457,7 +534,7 @@ section{position:relative}
   <div class="ask__rule" aria-hidden="true"></div>
 
   <footer class="foot">
-    <div class="foot__logo">NOXTA<sup>&trade;</sup></div>
+    <div class="foot__logo">NOXTA</div>
     <nav class="foot__nav">
       <div class="foot__col">
         <a href="#work"><span>01</span> Work</a>
@@ -475,7 +552,7 @@ section{position:relative}
       <a href="https://linkedin.com/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 110-4.12 2.06 2.06 0 010 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg> LinkedIn</a>
       <a href="https://wa.me/31000000000" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.39-1.48-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.07c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.69.62.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.41-.07-.12-.27-.2-.57-.35M12.05 21.79h-.01a9.87 9.87 0 01-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 01-1.51-5.26c0-5.45 4.44-9.88 9.89-9.88 2.64 0 5.12 1.03 6.99 2.9a9.83 9.83 0 012.89 6.99c0 5.45-4.43 9.88-9.88 9.88M20.46 3.49A11.82 11.82 0 0012.05 0C5.5 0 .16 5.34.16 11.89c0 2.1.55 4.14 1.59 5.95L.06 24l6.3-1.65a11.88 11.88 0 005.69 1.45h.01c6.55 0 11.89-5.34 11.89-11.89 0-3.18-1.24-6.17-3.48-8.42"/></svg> WhatsApp</a>
     </div>
-    <div class="foot__copy">&copy; Noxta Studio<br>All rights reserved<br>2026</div>
+    <div class="foot__copy">&copy; 2026 Noxta Studio<br>All rights reserved<br>KvK 42092474</div>
   </footer>
 </section>
 
@@ -577,24 +654,81 @@ section{position:relative}
      orange -> dead -> orange -> ink -> cream -> orange. */
   var THEMES = {
     hero:   {bg:"#ff5a1f", fg:"#0e0a06", accent:"#0e0a06", line:"rgba(14,10,6,.18)"},
-    dead:   {bg:"#e9e8e4", fg:"#8e8d88", accent:"#5f5d58", line:"rgba(94,93,88,.22)"},
+    dead:   {bg:"#e9e8e4", fg:"#6f6e69", accent:"#5f5d58", line:"rgba(94,93,88,.22)"},
     orange: {bg:"#ff5a1f", fg:"#0e0a06", accent:"#0e0a06", line:"rgba(14,10,6,.18)"},
     ink:    {bg:"#0e0a06", fg:"#faf3e8", accent:"#ff5a1f", line:"rgba(250,243,232,.16)"},
     cream:  {bg:"#faf3e8", fg:"#0e0a06", accent:"#ff5a1f", line:"rgba(14,10,6,.14)"}
   };
 
-  function applyTheme(t){
-    var root = document.documentElement.style;
-    if(reduce){
-      root.setProperty("--bg",t.bg);root.setProperty("--fg",t.fg);
-      root.setProperty("--accent",t.accent);root.setProperty("--line",t.line);
-      return;
-    }
-    gsap.to("html",{ "--bg":t.bg, "--fg":t.fg, "--accent":t.accent, "--line":t.line,
-      duration:.6, ease:"power2.out", overwrite:"auto" });
+  // Static fallback: paint each section its OWN solid colour, no global
+  // animation. Used for reduced-motion (photosensitive-safe — no full-screen
+  // flashing) and if GSAP fails to load.
+  function paintSectionsStatic(){
+    document.querySelectorAll("section[data-theme]").forEach(function(sec){
+      var t = THEMES[sec.getAttribute("data-theme")];
+      if(!t) return;
+      sec.style.backgroundColor = t.bg;
+      sec.style.color = t.fg;
+      // --bg must travel with the section too: elements that use var(--bg) for
+      // their LABEL colour (toggle active button, "Recommended" badge, the work
+      // outro circle) go invisible otherwise, because the global --bg the
+      // animated engine tweens never updates on the static paths.
+      sec.style.setProperty("--bg", t.bg);
+      sec.style.setProperty("--fg", t.fg);
+      sec.style.setProperty("--accent", t.accent);
+      sec.style.setProperty("--line", t.line);
+    });
   }
 
-  if(!window.gsap){ // GSAP failed to load — reveal everything, bail gracefully
+  /* Static-path nav legibility (reduced-motion + GSAP-fail). With no palette
+     engine retinting the fixed nav, recolour it from whichever data-theme
+     section sits under the bar. Discrete colour swap, no animation —
+     photosensitive-safe. (#pivot has no data-theme and is light-bg in both
+     phases, so the inherited dark nav stays legible over it.) */
+  function navColorSync(){
+    var nav = document.getElementById("nav");
+    if(!nav) return;
+    var secs = Array.prototype.slice.call(document.querySelectorAll("section[data-theme]"));
+    function sync(){
+      var navY = nav.getBoundingClientRect().bottom;
+      var matched = false;
+      for(var i = secs.length - 1; i >= 0; i--){
+        var r = secs[i].getBoundingClientRect();
+        if(r.top <= navY && r.bottom > navY){
+          var t = THEMES[secs[i].getAttribute("data-theme")];
+          if(t){ nav.style.color = t.fg; matched = true; }
+          break;
+        }
+      }
+      // Only unthemed gap is #pivot, whose phases are both light-bg (grey then
+      // orange), so a dark nav stays legible there. Default to it so a scroll-up
+      // from an ink section doesn't strand a light nav over the grey.
+      if(!matched){ nav.style.color = THEMES.hero.fg; }
+    }
+    sync();
+    window.addEventListener("scroll", sync, {passive:true});
+    window.addEventListener("resize", sync);
+  }
+
+  /* Hide-on-scroll-down, reveal-on-the-tiniest-scroll-up nav. Independent of the
+     palette engine (which only sets colour); runs in every path (Lenis /
+     reduced-motion / GSAP-fail) since it's wired before any early return. */
+  (function(){
+    var hnav = document.getElementById("nav");
+    if(!hnav) return;
+    var lastY = window.scrollY;
+    window.addEventListener("scroll", function(){
+      var y = window.scrollY;
+      if(y <= 80){ hnav.classList.remove("is-hidden"); }
+      else if(y > lastY){ hnav.classList.add("is-hidden"); }
+      else if(y < lastY){ hnav.classList.remove("is-hidden"); }
+      lastY = y;
+    }, {passive:true});
+  })();
+
+  if(!window.gsap){ // GSAP failed to load — static colours, reveal everything, bail.
+    paintSectionsStatic();
+    navColorSync();
     document.querySelectorAll(".reveal").forEach(function(el){el.classList.add("in");});
     return;
   }
@@ -611,19 +745,62 @@ section{position:relative}
     lenis.on("scroll", ScrollTrigger.update);
     gsap.ticker.add(function(time){ lenis.raf(time * 1000); });
     gsap.ticker.lagSmoothing(0);
+
+    // Smooth-scroll in-page anchor links (nav, hero arrow, CTAs). A smooth
+    // scroll updates ScrollTrigger continuously, so the section colours stay
+    // correct on a nav click instead of snapping to a wrong one on a jump.
+    Array.prototype.forEach.call(document.querySelectorAll('a[href^="#"]'), function(a){
+      a.addEventListener("click", function(e){
+        var id = a.getAttribute("href");
+        if(id.length > 1 && document.querySelector(id)){
+          e.preventDefault();
+          lenis.scrollTo(id, { duration: 1.4, offset: 0 });
+        }
+      });
+    });
   }
 
-  /* 1) Section palette engine — whichever section is crossing the viewport
-        center owns the page colors, in BOTH scroll directions (no break on
-        scroll-up). */
-  gsap.utils.toArray("section[data-theme]").forEach(function(sec){
-    var t = THEMES[sec.getAttribute("data-theme")];
-    if(!t) return;
-    ScrollTrigger.create({
-      trigger:sec, start:"top center", end:"bottom center",
-      onToggle:function(self){ if(self.isActive) applyTheme(t); }
+  /* 1) Section palette engine.
+        Reduced-motion (photosensitive-safe): no animated background — each
+        section just paints its own solid colour, so there is NO full-screen
+        flashing at all.
+        Otherwise: the page background CONTINUOUSLY interpolates between section
+        colours, locked to scroll position. Because the colour is tied to where
+        you are (not a discrete snap on a timer), fast scrolling produces one
+        smooth sweep instead of a rapid strobe — no seizure-trigger flashing. */
+  var paletteSections = gsap.utils.toArray("section[data-theme]");
+  if(reduce){
+    paintSectionsStatic();
+    navColorSync();
+  } else {
+    var rootStyle = document.documentElement.style;
+    var paletteKeys = ["bg","fg","accent","line"];
+    function lum(hex){
+      var h = hex.replace("#",""); if(h.length !== 6) return 0.5;
+      return (0.2126*parseInt(h.substr(0,2),16) + 0.7152*parseInt(h.substr(2,2),16)
+            + 0.0722*parseInt(h.substr(4,2),16)) / 255;
+    }
+    paletteSections.forEach(function(sec, i){
+      if(i === 0) return; // hero: CSS :root already holds its colours
+      var from = THEMES[paletteSections[i-1].getAttribute("data-theme")];
+      var to   = THEMES[sec.getAttribute("data-theme")];
+      // Bigger luminance jump = longer, gentler transition. The black<->cream
+      // boundaries are the harshest, so they get the slowest blend (~86% of a
+      // viewport of scroll vs ~73% for the milder ones).
+      var d = Math.abs(lum(from.bg) - lum(to.bg));   // ~0.43 mild .. ~0.92 black/cream
+      var startPct = Math.round(90 + d * 10);         // ~94 .. ~99
+      var endPct   = Math.round(28 - d * 16);         // ~21 .. ~13
+      ScrollTrigger.create({
+        trigger: sec, start: "top "+startPct+"%", end: "top "+endPct+"%", scrub: true,
+        onUpdate: function(self){
+          var p = self.progress;
+          paletteKeys.forEach(function(k){
+            rootStyle.setProperty("--"+k, gsap.utils.interpolate(from[k], to[k], p));
+          });
+        }
+      });
     });
-  });
+  }
 
   /* 2) Entrance reveals — each beat gets its OWN motion that matches its job. */
   if(reduce){
@@ -638,39 +815,21 @@ section{position:relative}
       });
     }
 
-    // THE MIRROR — quiet line settles, then the truth SLAMS in.
-    gsap.set("#mirror .eyebrow", {opacity:0, y:18});
-    gsap.set("#mirrorWord", {opacity:0, y:26});
-    gsap.set("#mirror .mirror__snap", {opacity:0, scale:1.14, transformOrigin:"left top"});
-    gsap.set("#mirror .mirror__sub", {opacity:0, y:24});
-    reveal("#mirror", gsap.timeline({paused:true})
-      .to("#mirror .eyebrow", {opacity:1, y:0, duration:.6, ease:"power2.out"})
-      .to("#mirrorWord", {opacity:1, y:0, duration:.9, ease:"power2.out"}, "-=.35")
-      .to("#mirror .mirror__snap", {opacity:1, scale:1, duration:.42, ease:"power4.out"}, "+=.05")
-      .to("#mirror .mirror__sub", {opacity:1, y:0, duration:.7, ease:"power2.out"}, "-=.1")
-    );
+    // (The Mirror's sting now lives in the pinned #pivot set-piece below.)
 
-    // THE TURN — statement bursts, service rows charge in from the left.
+    // THE TURN (services) — lead settles, service rows charge in from the left.
     gsap.set("#services .sec__kicker", {opacity:0, x:-30});
-    gsap.set("#turnWord", {opacity:0, scale:.93, y:24, transformOrigin:"left center"});
+    gsap.set("#services .h-mega", {opacity:0, y:36, clipPath:"inset(0 0 100% 0)"});
     gsap.set("#services .svc__row", {opacity:0, x:-70});
     reveal("#services", gsap.timeline({paused:true})
       .to("#services .sec__kicker", {opacity:1, x:0, duration:.5, ease:"power2.out"})
-      .to("#turnWord", {opacity:1, scale:1, y:0, duration:.85, ease:"power3.out"}, "-=.2")
-      .to("#services .svc__row", {opacity:1, x:0, duration:.7, stagger:.1, ease:"power3.out"}, "-=.35")
+      .to("#services .h-mega", {opacity:1, y:0, clipPath:"inset(0 0 0% 0)", duration:.8, ease:"power3.out"}, "-=.2")
+      .to("#services .svc__row", {opacity:1, x:0, duration:.7, stagger:.12, ease:"power3.out"}, "-=.3")
     );
 
     // THE PROOF — heading wipes up, quotes slide in from the right.
-    gsap.set("#work .sec__kicker", {opacity:0, y:16});
-    gsap.set("#work .h-mega", {opacity:0, y:40, clipPath:"inset(0 0 100% 0)"});
-    gsap.set("#work .quote", {opacity:0, x:60});
-    gsap.set("#work .proof__line", {opacity:0, y:20});
-    reveal("#work", gsap.timeline({paused:true})
-      .to("#work .sec__kicker", {opacity:1, y:0, duration:.5, ease:"power2.out"})
-      .to("#work .h-mega", {opacity:1, y:0, clipPath:"inset(0 0 0% 0)", duration:.9, ease:"power3.out"}, "-=.2")
-      .to("#work .quote", {opacity:1, x:0, duration:.8, stagger:.2, ease:"power3.out"}, "-=.35")
-      .to("#work .proof__line", {opacity:1, y:0, duration:.6, ease:"power2.out"}, "-=.2")
-    );
+    // THE PROOF — heading, cases, and closing line are all panels inside the
+    // pinned horizontal showcase (see block 3c); nothing to reveal vertically.
 
     // THE PROMISE — steps reveal one at a time (methodical), founder fades in slow.
     gsap.set("#about .sec__kicker", {opacity:0, y:16});
@@ -719,16 +878,6 @@ section{position:relative}
         half of the before/after. Skipped on mobile + reduced-motion
         (the static target states still read the arc). */
   if(!reduce && !isMobile){
-    // deflate Mirror word as it crosses the screen
-    gsap.fromTo("#mirrorWord",{ "--wght":520 },{
-      "--wght":230, ease:"none",
-      scrollTrigger:{ trigger:"#mirror", start:"top bottom", end:"center center", scrub:true }
-    });
-    // bulk the Turn statement up to full weight (the ignition)
-    gsap.fromTo("#turnWord",{ "--wght":300 },{
-      "--wght":760, ease:"none",
-      scrollTrigger:{ trigger:"#services", start:"top bottom", end:"top 35%", scrub:true }
-    });
     // subtle parallax drift on the hero portrait
     gsap.to(".hero__photo",{ yPercent:8, ease:"none",
       scrollTrigger:{ trigger:".hero", start:"top top", end:"bottom top", scrub:true } });
@@ -751,6 +900,82 @@ section{position:relative}
       });
     }
   }
+
+  /* 3b) THE PIVOT — pinned transformation set-piece. As you scroll in place,
+        the grey "your website says otherwise" drains and IGNITES orange into
+        "we make you look as good as you are." Static stacked blocks on
+        mobile / reduced-motion (no pin). The #pivot has no data-theme, so the
+        global palette engine skips it and this owns its colours. */
+  (function(){
+    var pivot = document.querySelector("#pivot");
+    if(!pivot) return;
+    if(reduce || isMobile){ pivot.classList.add("is-static"); return; }
+
+    var rs = document.documentElement.style;
+    var grey = THEMES.dead, orange = THEMES.orange, ck = ["bg","fg","accent","line"];
+    function paint(from,to,p){ ck.forEach(function(k){ rs.setProperty("--"+k, gsap.utils.interpolate(from[k],to[k],p)); }); }
+
+    // ENTRY: drop orange -> grey as the pivot scrolls up toward the pin.
+    ScrollTrigger.create({
+      trigger:"#pivot", start:"top bottom", end:"top top", scrub:true,
+      onUpdate:function(self){ paint(orange, grey, self.progress); }
+    });
+
+    // The problem settles in: quiet line, then the truth SLAMS.
+    gsap.set("#pivot .pivot__eyebrow", {opacity:0, y:18});
+    gsap.set("#pivot .pivot__thin", {opacity:0, y:24});
+    gsap.set("#pivot .pivot__problem .pivot__heavy", {opacity:0, scale:1.12, transformOrigin:"left top"});
+    gsap.set("#pivot .pivot__problem .pivot__sub", {opacity:0, y:22});
+    ScrollTrigger.create({
+      trigger:"#pivot", start:"top 55%", once:true,
+      onEnter:function(){
+        gsap.timeline()
+          .to("#pivot .pivot__eyebrow", {opacity:1, y:0, duration:.5, ease:"power2.out"})
+          .to("#pivot .pivot__thin", {opacity:1, y:0, duration:.7, ease:"power2.out"}, "-=.3")
+          .to("#pivot .pivot__problem .pivot__heavy", {opacity:1, scale:1, duration:.42, ease:"power4.out"}, "+=.05")
+          .to("#pivot .pivot__problem .pivot__sub", {opacity:1, y:0, duration:.6, ease:"power2.out"}, "-=.1");
+      }
+    });
+
+    // PIN + IGNITE: hold the problem (grey), ignite to orange while crossfading
+    // to the solution, then hold the solution (orange) before releasing.
+    var ig = {p:0};
+    gsap.timeline({ scrollTrigger:{ trigger:"#pivot", start:"top top", end:"+=150%",
+        pin:true, scrub:true, anticipatePin:1, refreshPriority:2 } })
+      .to({}, {duration:.4})                                            // hold the problem (grey)
+      .to(ig, {p:1, duration:.85, ease:"power2.inOut", onUpdate:function(){ paint(grey, orange, ig.p); }}, "ig")
+      .to("#pivot .pivot__problem", {opacity:0, yPercent:-34, duration:.4, ease:"power2.in"}, "ig")          // problem leaves UP first
+      .fromTo("#pivot .pivot__solution", {opacity:0, yPercent:36, scale:.97},
+        {opacity:1, yPercent:0, scale:1, duration:.5, ease:"power3.out"}, "ig+=.42")                         // then solution rises in
+      .to({}, {duration:.5});                                           // hold the solution (orange)
+  })();
+
+  /* 3c) WORK — pinned horizontal showcase: each case fills the screen one at a
+        time as you scroll sideways. Static vertical stack on mobile/reduced. */
+  (function(){
+    var workx = document.querySelector("#work .workx");
+    if(!workx) return;
+    if(reduce || isMobile){ workx.classList.add("is-static"); return; }
+    var track = workx.querySelector(".workx__track");
+    var panels = track.querySelectorAll(".workx__panel");
+    var count = panels.length;
+    // Dwell-then-move: each panel sits still for a stretch (readable), then
+    // slides quickly to the next. So you can stop anywhere in a dwell and read.
+    var tl = gsap.timeline({
+      scrollTrigger:{
+        trigger: workx, pin:true, scrub:true, anticipatePin:1, start:"top top",
+        end: function(){ return "+=" + Math.round(window.innerHeight * 0.9 * count); },
+        invalidateOnRefresh:true, refreshPriority:1
+      }
+    });
+    tl.to({}, {duration:0.9});                                // dwell on the title
+    for(var i=1; i<count; i++){
+      (function(idx){
+        tl.to(track, { x:function(){ return -panels[idx].offsetLeft; }, duration:0.69, ease:"power2.inOut" })
+          .to({}, {duration:1.1});                            // dwell on this panel
+      })(i);
+    }
+  })();
 
   /* 4) Nav contrast floor — keep the logo/links legible over every theme.
         (Handled by --fg inheritance; nothing extra needed, but force a
