@@ -13,7 +13,7 @@
      plays the ignite intro; arriving via an internal page transition does a
      quick reveal instead (and suppresses the heavy intro); reduced-motion skips
      both. is-loading = scroll lock until the cover clears. -->
-<script>try{var _h=document.documentElement,_r=window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches,_pt=false;try{_pt=sessionStorage.getItem('noxtaPT')==='1';if(_pt)sessionStorage.removeItem('noxtaPT');}catch(e){}if(_r){_h.classList.add('intro-seen');}else if(_pt){_h.classList.add('intro-seen','tcover','is-loading');}else{_h.classList.add('is-loading');}}catch(e){}</script>
+<script>try{var _h=document.documentElement,_r=window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches,_m=window.matchMedia&&matchMedia('(max-width:760px)').matches,_pt=false;try{_pt=sessionStorage.getItem('noxtaPT')==='1';if(_pt)sessionStorage.removeItem('noxtaPT');}catch(e){}if(_r||_m){_h.classList.add('intro-seen');}else if(_pt){_h.classList.add('intro-seen','tcover','is-loading');}else{_h.classList.add('is-loading');}}catch(e){}</script>
 <noscript><style>#preloader{display:none!important}</style></noscript>
 
 <!-- Display: Clash Display (variable, Fontshare) · Body: General Sans · Mono: Space Mono · Serif accent: Instrument Serif -->
@@ -333,6 +333,9 @@ section{position:relative}
 .qa{border-top:2px solid var(--line);padding-top:20px}
 .qa__q{font-family:var(--font-display);font-weight:600;font-size:clamp(1.12rem,1.7vw,1.42rem);letter-spacing:-.01em;line-height:1.22}
 .qa__a{margin-top:12px;font-size:1rem;line-height:1.62;opacity:.75;max-width:48ch}
+/* Mobile-only halftone melt dividers at the cream<->ink seams (injected by JS on mobile). */
+.melt-divider{display:block;line-height:0;font-size:0;margin:0}
+@media(min-width:761px){.melt-divider{display:none!important}}
 
 /* ===== ASK + FOOTER (orange, reference layout) ===================== */
 .ask{padding:clamp(80px,12vh,170px) 0 0}
@@ -954,7 +957,7 @@ html.is-loading{overflow:hidden}
 
   /* Smooth scroll (Lenis) — eased, momentum scroll feel, synced to ScrollTrigger.
      Native scroll kept for reduced-motion + touch (Lenis leaves touch native). */
-  if(!reduce && !isMobile && window.Lenis){
+  if(!reduce && window.Lenis){
     var lenis = new Lenis({
       duration: 1.15,
       easing: function(t){ return Math.min(1, 1.001 - Math.pow(2, -10 * t)); },
@@ -1051,12 +1054,44 @@ html.is-loading{overflow:hidden}
     });
   }
 
-  /* 2) Entrance reveals — each beat gets its OWN motion that matches its job.
-        Mobile joins reduced-motion here: reveal everything statically and DON'T
-        build the per-section ScrollTriggers. Their initial measurement (a forced
-        reflow inside ScrollTrigger.enable) was ~142ms of the mobile TBT, and the
-        heavy scroll effects are already off on mobile — so this is pure win. */
-  if(reduce || isMobile){
+  /* Mobile-only dither melt at the cream<->ink seams. Desktop keeps the colour-morph
+     arc (a crisp seam would clash with the mid-scroll blend); mobile is static hard-edged,
+     so the halftone dissolve drops in cleanly. Pure SVG, regenerated on resize. */
+  if(isMobile){
+    (function(){
+      var CREAM="#faf3e8", INK="#0e0a06";
+      function meltSVG(from,to,dotTop,dotBot){
+        var W=Math.max(360,Math.ceil(window.innerWidth)), h=300, cell=12, gamma=0.7, over=0.4,
+            maxR=cell*0.40, seam=h/2, cols=Math.ceil(W/cell)+2, rows=Math.ceil(h/cell)+2, c="";
+        function cl(v){return v<0?0:v>1?1:v;}
+        for(var ry=0;ry<rows;ry++){ for(var cx=0;cx<cols;cx++){
+          var x=cx*cell+(ry%2?cell/2:0), y=ry*cell, t, r;
+          if(y<=seam+over*cell){ t=cl(1-(seam-y)/seam); r=maxR*Math.pow(t,gamma);
+            if(r>0.45) c+='<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="'+r.toFixed(2)+'" fill="'+dotTop+'"/>'; }
+          if(y>=seam-over*cell){ t=cl(1-(y-seam)/(h-seam)); r=maxR*Math.pow(t,gamma);
+            if(r>0.45) c+='<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="'+r.toFixed(2)+'" fill="'+dotBot+'"/>'; }
+        }}
+        return '<svg viewBox="0 0 '+W+' '+h+'" preserveAspectRatio="none" width="100%" height="'+h+'" style="display:block" xmlns="http://www.w3.org/2000/svg">'
+          +'<rect width="'+W+'" height="'+seam+'" fill="'+from+'"/><rect y="'+seam+'" width="'+W+'" height="'+(h-seam)+'" fill="'+to+'"/>'+c+'</svg>';
+      }
+      var seams=[
+        {before:"#about",   from:INK,   to:CREAM, dotTop:CREAM, dotBot:INK},  // work(ink) -> about(cream)
+        {before:"#pricing", from:CREAM, to:INK,   dotTop:INK,   dotBot:CREAM} // about(cream) -> pricing(ink)
+      ], made=[];
+      seams.forEach(function(s){
+        var target=document.querySelector(s.before); if(!target) return;
+        var d=document.createElement("div"); d.className="melt-divider";
+        d.innerHTML=meltSVG(s.from,s.to,s.dotTop,s.dotBot);
+        target.parentNode.insertBefore(d,target); made.push({el:d,s:s});
+      });
+      var rt; window.addEventListener("resize",function(){ clearTimeout(rt); rt=setTimeout(function(){
+        made.forEach(function(m){ m.el.innerHTML=meltSVG(m.s.from,m.s.to,m.s.dotTop,m.s.dotBot); });
+      },200); });
+    })();
+  }
+
+  /* 2) Entrance reveals — each beat gets its OWN motion that matches its job. */
+  if(reduce){
     document.querySelectorAll(".reveal").forEach(function(el){ el.style.opacity = 1; });
   } else {
     // play forward on the way down, reverse on the way up
