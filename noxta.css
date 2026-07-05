@@ -108,12 +108,15 @@ html.menu-open{overflow:hidden}
 }
 
 /* ===== CUSTOM CURSOR — single trailing dot (mouse / fine-pointer only) =======
-   Orange + mix-blend difference renders the dot as ink over orange sections and
-   orange over ink sections automatically, so it stays on-brand and visible. */
+   NOTE: was `mix-blend-mode:difference` for automatic contrast, but a fixed
+   blend layer over the whole page forces Chrome to re-composite the ENTIRE
+   viewport every frame (GPU + main-thread jank; Safari optimises it, so it was
+   smooth there — the classic reversal). Replaced with a two-tone dot (ink core +
+   cream ring) that stays visible on orange / ink / cream WITHOUT any blend. */
 .cursor-dot{
   position:fixed;top:0;left:0;width:10px;height:10px;
   display:grid;place-items:center;                      /* centres the label when expanded */
-  border-radius:50%;background:var(--orange,#ff5a1f);mix-blend-mode:difference;
+  border-radius:50%;background:var(--ink,#0e0a06);box-shadow:0 0 0 1.6px var(--cream,#faf3e8);
   pointer-events:none;z-index:9999;opacity:0;will-change:transform;
   transition:width .32s cubic-bezier(.22,.61,.36,1),height .32s cubic-bezier(.22,.61,.36,1),
              background-color .3s ease,opacity .35s ease;
@@ -125,6 +128,6 @@ html.menu-open{overflow:hidden}
   font-size:0;opacity:0;pointer-events:none;transition:font-size .25s ease,opacity .2s ease;
 }
 /* expanded "read" state over the project screenshots — solid (no blend) so it stays legible */
-.cursor-dot.is-read{width:94px;height:94px;mix-blend-mode:normal;background:var(--orange,#ff5a1f)}
+.cursor-dot.is-read{width:94px;height:94px;background:var(--orange,#ff5a1f);box-shadow:none}
 .cursor-dot.is-read .cursor-dot__label{font-size:15px;opacity:1}
 @media (hover:none),(pointer:coarse){ .cursor-dot{display:none} }

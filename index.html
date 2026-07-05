@@ -65,6 +65,9 @@
   --font-body:"General Sans",system-ui,sans-serif;
   --font-mono:"Space Mono",ui-monospace,monospace;
   --font-serif:"Instrument Serif",Georgia,serif;
+
+  /* shared paper-grain noise tile (used by .grain and the mobile static pivot) */
+  --grain-tex:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 *{margin:0;padding:0;box-sizing:border-box}
@@ -98,7 +101,24 @@ section{position:relative}
    scroll palette composites on the GPU instead of repainting the full viewport
    every frame. Built + driven in JS. Sits behind all content. */
 .bg-arc{position:fixed;inset:0;z-index:-1;pointer-events:none}
-.bg-arc .bg-layer{position:absolute;inset:0;will-change:opacity}
+/* ===== PAPER GRAIN — baked into the arc layers (cheap) =================
+   Grain lives ON each bg-arc colour layer via background-blend-mode: a LOCAL
+   blend (the layer's noise ⊗ its own colour), rasterised ONCE when the layer
+   paints, then just crossfaded by opacity with everything else. It is NOT a
+   fixed mix-blend overlay recomposited against the page every frame (that was
+   the earlier perf sin). soft-light textures the colour without darkening it.
+   (Desktop only — on mobile/reduced-motion the bg-arc isn't built.) */
+.bg-arc .bg-layer{position:absolute;inset:0;will-change:opacity;
+  background-image:var(--grain-tex);background-blend-mode:soft-light}
+
+/* ===== SCROLL PROGRESS BAR ============================================
+   Thin bar pinned at the very top; the fill scales left→right with scroll
+   progress. Uses the palette tokens (--accent fill on a faint --line track) so
+   it stays legible as the page morphs orange→grey→ink→cream. */
+.progress{position:fixed;top:0;left:0;right:0;height:5px;z-index:96;pointer-events:none;
+  background:color-mix(in srgb, var(--accent) 22%, transparent)}
+.progress__fill{display:block;height:100%;transform-origin:left center;transform:scaleX(0);
+  background:var(--accent);will-change:transform}
 
 /* ===== NAV + FULLSCREEN MENU ===== moved to noxta.css (shared, all pages) = */
 
@@ -134,7 +154,7 @@ section{position:relative}
 }
 .hero__tagline{
   font-family:var(--font-display);font-weight:600;text-transform:none;
-  font-size:clamp(2.2rem,4.8vw,4.6rem);line-height:.98;letter-spacing:-.02em;
+  font-size:clamp(2.2rem,4.8vw,4.6rem);line-height:.98;letter-spacing:-.02em;word-spacing:.1em;
 }
 .hero__arrow{
   margin-top:clamp(24px,3.5vh,48px);
@@ -169,10 +189,15 @@ section{position:relative}
 .sec__kicker{display:flex;align-items:center;gap:14px;margin-bottom:30px}
 .sec__kicker .ln{flex:1;height:1px;background:currentColor;opacity:.25}
 .h-mega{font-family:var(--font-display);font-weight:700;text-transform:uppercase;
-  font-size:clamp(2.2rem,11vw,11rem);line-height:.84;letter-spacing:-.02em}
+  font-size:clamp(2.2rem,11vw,11rem);line-height:.84;letter-spacing:-.02em;word-spacing:.16em}
 /* "No agency games." is the longest h-mega line and can't fit at 11vw, so it
    wrapped and orphaned "NO". Cap this headline so both intended lines fit. */
-#about .h-mega{font-size:clamp(1.5rem,8vw,8.4rem);white-space:nowrap}
+/* Base .h-mega now carries word-spacing so multi-word titles don't mush under the tight tracking.
+   #about is width-capped (nowrap "NO AGENCY GAMES") so it takes a smaller gap + a hair less size to still fit. */
+#about .h-mega{font-size:clamp(1.5rem,7.6vw,8rem);white-space:nowrap;word-spacing:.1em}
+/* #services is split into per-glyph spans for its animation; word-spacing can't reach the spaces there,
+   so it's neutralised here and the gap is added as margin on the space glyphs in splitChars(). */
+.nxChar{word-spacing:0}
 
 /* ===== PIVOT — pinned transformation set-piece ====================== */
 .pivot{position:relative;height:100svh;overflow:hidden}
@@ -180,12 +205,18 @@ section{position:relative}
 .pivot__solution{opacity:0}
 .pivot__eyebrow{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;opacity:.7;margin-bottom:26px}
 .pivot__thin{font-family:var(--font-display);font-weight:300;text-transform:uppercase;
-  font-size:clamp(2.2rem,6.5vw,5.5rem);line-height:.95;letter-spacing:-.01em}
+  font-size:clamp(2.2rem,6.5vw,5.5rem);line-height:.95;letter-spacing:-.01em;word-spacing:.16em}
 .pivot__heavy{font-family:var(--font-display);font-weight:700;text-transform:uppercase;
-  font-size:clamp(2.8rem,9vw,8.5rem);line-height:.86;letter-spacing:-.02em;margin-top:.1em}
+  font-size:clamp(2.8rem,9vw,8.5rem);line-height:.86;letter-spacing:-.02em;word-spacing:.16em;margin-top:.1em}
 .pivot__heavy--lg{font-size:clamp(2.8rem,8.2vw,7.8rem);max-width:15ch}
 .pivot__problem .pivot__heavy{color:#181109}
 .pivot__sub{margin-top:34px;max-width:34ch;font-size:1.15rem;opacity:.82}
+/* SOLUTION — centred set-piece with a serif-italic turn (from the standalone mockup) */
+.pivot__solution{justify-content:center;text-align:center}
+.pivot__solution .pivot__heavy{max-width:none;margin-inline:auto;text-wrap:balance}
+.pivot__serif{font-family:var(--font-serif);font-style:italic;font-weight:400;text-transform:none;letter-spacing:0}
+.pivot__solution .pivot__sub{max-width:none;margin:30px auto 0;opacity:.66;
+  font-family:var(--font-mono);text-transform:uppercase;font-size:.78rem;letter-spacing:.26em}
 /* mobile / reduced-motion: no pin — stack the two phases as solid blocks.
    Grey base on the section + a 1px overlap on the solution so the orange page
    background can't peek through a sub-pixel seam as a "divider line". */
@@ -206,6 +237,7 @@ section{position:relative}
 .svc__desc{font-size:1rem;opacity:.9;max-width:34ch;justify-self:end;transition:opacity .35s,color .35s}
 .svc__row:hover .svc__num,.svc__row:hover .svc__desc{opacity:1;color:var(--cream)}
 @media(max-width:880px){.svc__row{grid-template-columns:auto 1fr;gap:14px}.svc__desc{display:none}}
+.svc__close{margin-top:clamp(30px,4.5vh,56px);font-family:var(--font-display);font-weight:600;font-size:clamp(1.3rem,2.4vw,2.05rem);line-height:1.25;letter-spacing:-.01em;word-spacing:.06em;max-width:46ch;text-wrap:balance}
 
 /* ===== PROOF (real testimonials) ===================================== */
 .workx{position:relative;height:100svh;overflow:hidden}
@@ -216,7 +248,7 @@ section{position:relative}
 .workx__panel--outro{justify-content:space-between}
 .workx__outro-text{max-width:48%}
 .workx__outro-text .workx__hint{margin-top:0;margin-bottom:18px}
-.workx__outro-head{font-family:var(--font-display);font-weight:700;text-transform:uppercase;font-size:clamp(2.3rem,4.4vw,4rem);line-height:.96;letter-spacing:-.02em;margin-bottom:24px}
+.workx__outro-head{font-family:var(--font-display);font-weight:700;text-transform:uppercase;font-size:clamp(2.3rem,4.4vw,4rem);line-height:.96;letter-spacing:-.02em;word-spacing:.16em;margin-bottom:24px}
 .workx__outro-note{font-size:1.05rem;line-height:1.5;opacity:.72;max-width:36ch}
 .workx__outro-cta{margin-top:30px}
 .workx__outro-circle{flex:none;width:clamp(96px,11vw,190px);height:clamp(96px,11vw,190px);border-radius:50%;background:var(--accent);color:var(--bg);display:grid;place-items:center;font-size:clamp(2.2rem,3.6vw,4rem);transition:transform .35s}
@@ -277,9 +309,14 @@ section{position:relative}
 .tier__label{font-family:var(--font-mono);font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;opacity:.55}
 .tier__name{font-family:var(--font-display);font-weight:700;text-transform:uppercase;font-size:2rem;line-height:1;margin-top:6px}
 .tier__tag{font-size:.95rem;opacity:.7;margin-top:8px;min-height:2.7em}
-.tier__price{font-family:var(--font-display);font-weight:700;font-size:1.65rem;color:var(--accent);margin:16px 0 2px}
+.tier__worth{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;opacity:.5;margin-top:16px}
+.tier__worth s{opacity:.85}
+.tier__price{font-family:var(--font-display);font-weight:700;font-size:1.65rem;color:var(--accent);margin:3px 0 2px}
+.tier__save{font-size:.74rem;font-style:italic;opacity:.6;margin:0 0 2px}
 .tier__feat{list-style:none;margin:16px 0;display:flex;flex-direction:column;gap:9px;font-size:.92rem}
-.tier__feat li{display:flex;gap:10px;opacity:.85;line-height:1.35}
+.tier__feat li{display:flex;gap:10px;opacity:.85;line-height:1.35;justify-content:space-between;align-items:baseline}
+.tier__feat li .tier__f{flex:1}
+.tier__feat li .tier__w{font-family:var(--font-mono);font-size:.72rem;opacity:.55;flex:none;white-space:nowrap;letter-spacing:.02em}
 .tier__feat li::before{content:"+";color:var(--accent);font-weight:700;flex:none}
 .tier__foot{font-size:.82rem;opacity:.55;margin-top:auto;padding-top:16px;border-top:1px solid var(--line)}
 .tier__cta{margin-top:16px;display:inline-flex;align-items:center;gap:8px;font-family:var(--font-display);font-weight:600;text-transform:uppercase;font-size:.9rem;color:var(--accent)}
@@ -290,12 +327,19 @@ section{position:relative}
 .careplus p{font-size:.9rem;opacity:.7;max-width:52ch;margin-top:8px}
 .pricing__note{margin-top:30px;opacity:.75;font-size:1.05rem}
 .pricing__note a{color:var(--accent);font-weight:600;border-bottom:1px solid currentColor}
+.pricing__terms{margin-top:20px;font-size:.95rem;opacity:.7}
+.answers__grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,4vw,60px);margin-top:clamp(42px,6vh,76px)}
+@media(max-width:880px){.answers__grid{grid-template-columns:1fr;gap:34px}}
+.qa{border-top:2px solid var(--line);padding-top:20px}
+.qa__q{font-family:var(--font-display);font-weight:600;font-size:clamp(1.12rem,1.7vw,1.42rem);letter-spacing:-.01em;line-height:1.22}
+.qa__a{margin-top:12px;font-size:1rem;line-height:1.62;opacity:.75;max-width:48ch}
 
 /* ===== ASK + FOOTER (orange, reference layout) ===================== */
 .ask{padding:clamp(80px,12vh,170px) 0 0}
 .ask__inner{position:relative}
+.ask__eyebrow{font-family:var(--font-mono);font-size:clamp(.78rem,1.3vw,1rem);letter-spacing:.05em;text-transform:uppercase;opacity:.7;max-width:60%;margin-bottom:clamp(14px,2.4vh,26px)}
 .ask__big{font-family:var(--font-display);font-weight:700;text-transform:uppercase;
-  font-size:clamp(4.5rem,21vw,21rem);line-height:.8;letter-spacing:-.03em}
+  font-size:clamp(4.5rem,21vw,21rem);line-height:.8;letter-spacing:-.03em;word-spacing:.08em}
 .ask__circle{position:absolute;right:var(--pad);top:clamp(20px,9vh,110px);
   width:clamp(96px,11vw,190px);height:clamp(96px,11vw,190px);border-radius:50%;
   background:var(--ink);color:var(--orange);display:grid;place-items:center;
@@ -379,6 +423,9 @@ html.is-loading{overflow:hidden}
 </head>
 <body>
 
+<!-- scroll progress bar (fills across the whole page) -->
+<div class="progress" aria-hidden="true"><span class="progress__fill" id="progressFill"></span></div>
+
 <!-- ===================== PRELOADER ===================== -->
 <div class="preloader" id="preloader" role="presentation" aria-hidden="true">
   <div class="preloader__word">NOXTA</div>
@@ -447,7 +494,7 @@ html.is-loading{overflow:hidden}
   </div>
   <div class="pivot__phase pivot__solution">
     <div class="wrap">
-      <h2 class="pivot__heavy pivot__heavy--lg">We make you look<br>as good as you actually are.</h2>
+      <h2 class="pivot__heavy pivot__heavy--lg">We make you look<br>as good as you<br><em class="pivot__serif">actually are.</em></h2>
       <p class="pivot__sub">Impossible to ignore. On purpose.</p>
     </div>
   </div>
@@ -481,6 +528,7 @@ html.is-loading{overflow:hidden}
         <span class="svc__desc">Fast, flawless, built to convert. Clean code that performs on every device.</span>
       </a>
     </div>
+    <p class="svc__close reveal">The point isn&rsquo;t just a prettier site. It&rsquo;s one that turns &ldquo;nice work&rdquo; into a booked call.</p>
   </div>
 </section>
 
@@ -521,7 +569,7 @@ html.is-loading{overflow:hidden}
         <div class="workx__info">
           <span class="workx__index">02 — 02</span>
           <h3 class="workx__name">VOEP</h3>
-          <p class="workx__role">Vintage marine e-commerce &middot; WooCommerce</p>
+          <p class="workx__role">Vintage marine e-commerce &middot; First sale shipped to Sweden</p>
           <p class="workx__quote">&ldquo;Now it looks as professional as I always pictured &mdash; thanks to Adrian&rsquo;s ideas and help.&rdquo;</p>
           <p class="workx__who">Alex &mdash; Owner</p>
           <div class="workx__links">
@@ -554,14 +602,14 @@ html.is-loading{overflow:hidden}
     <div class="promise__grid">
       <div class="steps">
         <div class="step reveal"><span class="step__n">01</span><div><div class="step__t">We dig in</div><p class="step__d">A real conversation about your business, your customers, and what&rsquo;s holding the brand back.</p></div></div>
-        <div class="step reveal"><span class="step__n">02</span><div><div class="step__t">We design it for you</div><p class="step__d">One clear direction, then a site built around it — personalized, not a template with your logo dropped in.</p></div></div>
+        <div class="step reveal"><span class="step__n">02</span><div><div class="step__t">We design it for you</div><p class="step__d">One clear direction — usually within a week — then a site built around it, personalized, not a template with your logo dropped in.</p></div></div>
         <div class="step reveal"><span class="step__n">03</span><div><div class="step__t">We fine-tune until it&rsquo;s right</div><p class="step__d">Every request traced and refined. You get no worries and a site you&rsquo;re proud to send.</p></div></div>
       </div>
 
       <div>
         <div class="guarantee reveal">
-          <h4>The promise</h4>
-          <p>Clear scope. A fixed timeline. We keep refining until you&rsquo;d happily put your name next to it. If it&rsquo;s not right, we&rsquo;re not done.</p>
+          <h4>The guarantee</h4>
+          <p>Clear scope, a fixed timeline. If the first design direction doesn&rsquo;t land, I rework it once &mdash; free. And if you still don&rsquo;t want to carry on, you pay only for the hours worked, capped at 30%. The risk is mine, not yours.</p>
         </div>
         <p class="founder reveal">&ldquo;I&rsquo;m Adrian. I started Noxta because most websites make good businesses look average. I fix that.&rdquo;
           <span class="sig">Adrian &mdash; Founder, Noxta</span>
@@ -581,6 +629,7 @@ html.is-loading{overflow:hidden}
       <button data-mode="ret" type="button">Monthly Retainer</button>
     </div>
     <div class="tiers" id="tiers"></div>
+    <p class="pricing__terms reveal">Projects split 50% to start, 50% at launch &mdash; Tier III in three. No surprises.</p>
     <div class="careplus reveal">
       <div>
         <h4>Care+ FAQ Assistant <span class="price">+&euro;89&#8239;/&#8239;mo</span> <span class="setup">&middot; &euro;750 setup</span></h4>
@@ -588,13 +637,40 @@ html.is-loading{overflow:hidden}
       </div>
       <a href="#contact" class="tier__cta">Ask about it</a>
     </div>
-    <p class="pricing__note reveal">Not sure which lane? <a href="#contact">Start a project</a> and I&rsquo;ll tell you straight which one fits.</p>
+    <p class="pricing__note reveal">Been quoted &euro;500&ndash;1,000 for a website? That was a template price &mdash; this is a different thing. Not sure which lane? <a href="#contact">Start a project</a> and I&rsquo;ll tell you straight which one fits.</p>
+  </div>
+</section>
+
+<!-- ===================== STRAIGHT ANSWERS (objections) ===================== -->
+<section class="sec answers" id="answers" data-theme="ink">
+  <div class="wrap">
+    <div class="sec__kicker mono reveal"><span>Straight answers</span><span class="ln"></span></div>
+    <h2 class="h-mega reveal">The part most<br>studios skip.</h2>
+    <div class="answers__grid">
+      <div class="qa reveal">
+        <h3 class="qa__q">&ldquo;You&rsquo;re one person &mdash; what if you disappear?&rdquo;</h3>
+        <p class="qa__a">Fair. So nothing I build leans on me being around. It&rsquo;s clean, hand-coded, standard HTML/CSS &mdash; any developer can pick it up. Your domain, files and accounts are in your name from day one. Worst case, you still own a site that works.</p>
+      </div>
+      <div class="qa reveal">
+        <h3 class="qa__q">&ldquo;Who owns the code?&rdquo;</h3>
+        <p class="qa__a">You do. Yours to keep &mdash; no license, no lock-in, no monthly fee just to stay online. When it&rsquo;s done I hand you everything. You can walk away whenever you like; most people don&rsquo;t, but you can.</p>
+      </div>
+      <div class="qa reveal">
+        <h3 class="qa__q">&ldquo;What if I need changes later?&rdquo;</h3>
+        <p class="qa__a">Two ways. Email me and I quote the change &mdash; or keep me on a retainer (from &euro;75/mo) where edits are just part of the deal: same-week, no re-explaining who you are each time. You decide after launch, not before.</p>
+      </div>
+      <div class="qa reveal">
+        <h3 class="qa__q">&ldquo;Why not just use Webflow or Squarespace?&rdquo;</h3>
+        <p class="qa__a">If a template says everything you need &mdash; use one. You&rsquo;re reading this because it doesn&rsquo;t. Those tools hand everyone the same shapes; I build yours from scratch, so it looks like you and loads fast. Different job, different result.</p>
+      </div>
+    </div>
   </div>
 </section>
 
 <!-- ===================== ASK + FOOTER ===================== -->
 <section class="ask" id="contact" data-theme="orange">
   <div class="wrap ask__inner">
+    <p class="ask__eyebrow reveal">The best time is before your next launch, not after.</p>
     <h2 class="ask__big reveal">Let&rsquo;s build.</h2>
     <a href="contact.html" class="ask__circle reveal" aria-label="Start a project">&#8594;</a>
     <div class="ask__row reveal">
@@ -657,23 +733,29 @@ html.is-loading{overflow:hidden}
   /* ---- Pricing (real Noxta tiers). Rendered first so it works even if
           GSAP never loads. One-Time vs Monthly Retainer toggle. ---- */
   var ONE_TIME=[
-    {label:"Tier · I",price:"€600 – 1,200",name:"Small",tag:"One thing, done well.",features:["Single landing page or minor redesign","Simple brand mark or wordmark refresh","Up to 600 words of copy I write with you","Basic SEO setup (title, meta, sitemap)","Mobile-first, hand-coded HTML / CSS","One round of revisions"],foot:"A focused launch page or a one-off redesign for a side project. Usually takes one to two weeks."},
-    {label:"Tier · II",price:"€1,200 – 2,000",name:"Mid",tag:"A full site with a real brand.",rec:true,features:["Full multi-page website (4–8 pages)","Brand identity: wordmark, palette, type","Copywriting across the site (~2,000 words)","On-page SEO, schema, sitemap","Contact form, analytics, social meta","Two rounds of revisions · 2–4 week turnaround","First 30 days of Standard retainer included"],foot:"Small businesses without a site, or whose current one is hurting them. Most of my projects land here."},
-    {label:"Tier · III",price:"€3,500 – 6,000",name:"Large",tag:"Real shops or custom builds.",features:["WooCommerce or Shopify e-commerce builds","Hand-coded, no page-builder bloat","Product database setup and import","Payments (IDEAL, Bancontact, card) + shipping","Search, filters, custom mobile UX","Three revision rounds · 6–8 week turnaround","First 30 days of Standard retainer included"],foot:"Shops with real inventory or custom flows an off-the-shelf template can't handle. Over 2,000 SKUs quoted bespoke. VOEP was a Large."}
+    {label:"Tier · I",price:"€800 – 1,200",name:"Small",tag:"One thing, done well.",worth:"1,900",features:[["Landing page or focused redesign, hand-coded","900"],["Brand mark / wordmark refresh","350"],["Copy I write with you (up to 600 words)","300"],["Basic SEO: title, meta, sitemap","200"],["Domain + launch setup","150"],"One round of revisions"],foot:"A focused launch page or a one-off redesign for a side project. Usually takes one to two weeks."},
+    {label:"Tier · II",price:"€1,800 – 3,500",name:"Mid",tag:"A full site with a real brand.",rec:true,worth:"4,500",features:[["Multi-page site (4–8 pages), hand-coded","2,200"],["Brand identity: wordmark, palette, type","900"],["Copywriting across the site (~2,000 words)","650"],["On-page SEO, schema, sitemap","400"],["Contact form, analytics, social meta","200"],["First 30 days of Standard care","150"],"Two rounds of revisions · 2–4 week turnaround"],foot:"Small businesses without a site, or whose current one is hurting them. Most of my projects land here."},
+    {label:"Tier · III",price:"€6,000+",name:"Large",tag:"Real shops or custom builds.",worth:"11,650",features:[["E-commerce build (WooCommerce / Shopify), hand-coded","7,000"],["Product database setup + import","1,200"],["Payments (IDEAL, Bancontact, card) + shipping","900"],["Brand identity: wordmark, palette, type","1,000"],["Copywriting across the store","800"],["E-commerce SEO, schema, sitemap","600"],["First 30 days of Standard care","150"],"Three rounds of revisions · 6–8 week turnaround"],foot:"Shops with real inventory or custom flows an off-the-shelf template can't handle. Over 2,000 SKUs quoted bespoke. VOEP was a Large."}
   ];
   var RETAINER=[
-    {label:"Plan · I",price:"€50 / month",name:"Light",tag:"Kept up to date and safe.",features:["Uptime monitoring","Weekly automated backups","Security patches and plugin updates","1 hour of edits per month, rolled forward up to 2 months","Email support, 48h reply","Annual prepay · 12 months for the price of 11"],foot:"Finished sites that just need to stay alive and up to date."},
+    {label:"Plan · I",price:"€75 / month",name:"Light",tag:"Kept up to date and safe.",features:["Uptime monitoring","Weekly automated backups","Security patches and plugin updates","1 hour of edits per month, rolled forward up to 2 months","Email support, 48h reply","Annual prepay · 12 months for the price of 11"],foot:"Finished sites that just need to stay alive and up to date."},
     {label:"Plan · II",price:"€150 / month",name:"Standard",tag:"Light plus active edits.",rec:true,features:["Everything in Light","3 hours of edits per month","Copy tweaks and small layout changes","Monthly performance report","Same-week edits (Mon–Fri)","Annual prepay · 12 months for the price of 11"],foot:"Sites that change a few times a month: pricing, menu, content updates."},
     {label:"Plan · III",price:"€450 / month",name:"Active",tag:"I'm basically on your team.",features:["Everything in Standard","8 hours of edits per month","Priority response (next business day)","Phone / WhatsApp support (Mon–Fri 9–17, urgent only)","Quarterly strategy call","Annual prepay · 12 months for the price of 11"],foot:"Growing shops and active marketing: new pages, campaigns, and ongoing work."}
   ];
   function priceCard(t){
-    var feats=t.features.map(function(f){return "<li>"+f+"</li>";}).join("");
+    var feats=t.features.map(function(f){
+      return (typeof f==="string")
+        ? '<li><span class="tier__f">'+f+'</span></li>'
+        : '<li><span class="tier__f">'+f[0]+'</span><span class="tier__w">€'+f[1]+'</span></li>';
+    }).join("");
     return '<div class="tier'+(t.rec?" rec":"")+'">'
       +(t.rec?'<span class="tier__badge">Recommended</span>':"")
       +'<span class="tier__label">'+t.label+'</span>'
       +'<span class="tier__name">'+t.name+'</span>'
       +'<p class="tier__tag">'+t.tag+'</p>'
+      +(t.worth?'<div class="tier__worth">Piece by piece &asymp; <s>€'+t.worth+'</s></div>':"")
       +'<div class="tier__price">'+t.price+'</div>'
+      +(t.worth?'<p class="tier__save">One head, one price &mdash; no four-freelancer markup.</p>':"")
       +'<ul class="tier__feat">'+feats+'</ul>'
       +'<p class="tier__foot">'+t.foot+'</p>'
       +'<a href="#contact" class="tier__cta">Start a project</a>'
@@ -768,6 +850,19 @@ html.is-loading{overflow:hidden}
     });
   }
 
+  /* Memoised :root custom-property writer. Chrome (Blink) invalidates the WHOLE
+     document's style when an inherited custom property changes on :root, and then
+     repaints every element that consumes it — per scroll frame that's a big cost
+     (Safari/WebKit optimises this far better, hence "smoother in Safari"). GSAP's
+     colour interpolation returns integer rgb strings, so during slow scrolls /
+     the long pinned scrubbers many consecutive frames yield the SAME value —
+     skipping the redundant setProperty skips the recalc + repaint entirely.
+     Shared cache so the palette engine + pivot scrubber never fight it. */
+  var _rootStyle = document.documentElement.style, _rootVarCache = {};
+  function setRootVar(prop, val){
+    if(_rootVarCache[prop] !== val){ _rootStyle.setProperty(prop, val); _rootVarCache[prop] = val; }
+  }
+
   /* Static-path nav legibility (reduced-motion + GSAP-fail). With no palette
      engine retinting the fixed nav, recolour it from whichever data-theme
      section sits under the bar. Discrete colour swap, no animation —
@@ -776,7 +871,12 @@ html.is-loading{overflow:hidden}
   function navColorSync(){
     var nav = document.getElementById("nav");
     if(!nav) return;
+    var rs = document.documentElement.style;
     var secs = Array.prototype.slice.call(document.querySelectorAll("section[data-theme]"));
+    // Also drive the fixed progress bar's tokens: on these paths (mobile/reduced)
+    // the :root --accent/--line don't morph (they're set per-section), so a fixed
+    // bar would keep the initial colour and vanish over e.g. the ink section.
+    function tint(t){ setRootVar("--accent", t.accent); setRootVar("--line", t.line); }
     function sync(){
       var navY = nav.getBoundingClientRect().bottom;
       var matched = false;
@@ -784,14 +884,14 @@ html.is-loading{overflow:hidden}
         var r = secs[i].getBoundingClientRect();
         if(r.top <= navY && r.bottom > navY){
           var t = THEMES[secs[i].getAttribute("data-theme")];
-          if(t){ nav.style.color = t.fg; matched = true; }
+          if(t){ nav.style.color = t.fg; tint(t); matched = true; }
           break;
         }
       }
       // Only unthemed gap is #pivot, whose phases are both light-bg (grey then
       // orange), so a dark nav stays legible there. Default to it so a scroll-up
       // from an ink section doesn't strand a light nav over the grey.
-      if(!matched){ nav.style.color = THEMES.hero.fg; }
+      if(!matched){ nav.style.color = THEMES.hero.fg; tint(THEMES.hero); }
     }
     sync();
     window.addEventListener("scroll", sync, {passive:true});
@@ -812,6 +912,31 @@ html.is-loading{overflow:hidden}
       else if(y < lastY){ hnav.classList.remove("is-hidden"); }
       lastY = y;
     }, {passive:true});
+  })();
+
+  /* Scroll progress bar — fill scaleX = how far through the page you are. Plain
+     scroll-linked (no GSAP dependency); Lenis still fires 'scroll' so it stays
+     smooth, and it works on the reduced-motion / GSAP-fail paths too. */
+  (function(){
+    var fill = document.getElementById("progressFill");
+    if(!fill) return;
+    var max = 0, lastM = -1e9, ticking = false;
+    function paint(){
+      ticking = false;
+      // Reading scrollHeight forces a layout — and during pinned sections layout is
+      // dirty every frame, so a per-frame read = a forced reflow every frame (jank).
+      // scrollHeight only changes on resize / pin-setup, NOT on scroll, so cache it
+      // and refresh at most ~2x/sec.
+      var now = performance.now();
+      if(now - lastM > 400){ max = document.documentElement.scrollHeight - window.innerHeight; lastM = now; }
+      var p = max > 0 ? window.scrollY / max : 0;
+      fill.style.transform = "scaleX(" + (p < 0 ? 0 : p > 1 ? 1 : p) + ")";
+    }
+    function onScroll(){ if(!ticking){ ticking = true; requestAnimationFrame(paint); } }
+    function onResize(){ lastM = -1e9; paint(); }   // force a fresh measure
+    paint();
+    window.addEventListener("scroll", onScroll, {passive:true});
+    window.addEventListener("resize", onResize);
   })();
 
   /* (Mobile menu + page transitions live in noxta.js — shared across pages.) */
@@ -862,7 +987,11 @@ html.is-loading{overflow:hidden}
         you are (not a discrete snap on a timer), fast scrolling produces one
         smooth sweep instead of a rapid strobe — no seizure-trigger flashing. */
   var paletteSections = gsap.utils.toArray("section[data-theme]");
-  if(reduce){
+  // Mobile joins the static path: its sections are short + un-pinned, so the
+  // continuous arc's transitions OVERLAP and wash the orange sections lighter than
+  // the opaque pivot block (a visible seam). Discrete solid section colours avoid
+  // it and match the rest of mobile (work + pivot already render static here).
+  if(reduce || isMobile){
     paintSectionsStatic();
     navColorSync();
   } else {
@@ -896,8 +1025,11 @@ html.is-loading{overflow:hidden}
 
     paletteSections.forEach(function(sec, i){
       if(i === 0) return; // hero: base layer + :root already hold its colours
-      var from = THEMES[paletteSections[i-1].getAttribute("data-theme")];
-      var to   = THEMES[sec.getAttribute("data-theme")];
+      var prevTheme = paletteSections[i-1].getAttribute("data-theme");
+      var curTheme  = sec.getAttribute("data-theme");
+      if(prevTheme === curTheme) return; // same colour as previous → no transition to scrub (skips a per-frame full-page repaint loop)
+      var from = THEMES[prevTheme];
+      var to   = THEMES[curTheme];
       var layer = bgLayers[i];
       // Bigger luminance jump = longer, gentler transition. The black<->cream
       // boundaries are the harshest, so they get the slowest blend (~86% of a
@@ -912,7 +1044,7 @@ html.is-loading{overflow:hidden}
           layer.style.opacity = p;                    // GPU crossfade — no repaint
           for(var k=0;k<paletteKeys.length;k++){
             var key = paletteKeys[k];
-            rootStyle.setProperty("--"+key, gsap.utils.interpolate(from[key], to[key], p));
+            setRootVar("--"+key, gsap.utils.interpolate(from[key], to[key], p));
           }
         }
       });
@@ -934,14 +1066,43 @@ html.is-loading{overflow:hidden}
 
     // (The Mirror's sting now lives in the pinned #pivot set-piece below.)
 
-    // THE TURN (services) — lead settles, service rows charge in from the left.
+    // THE TURN (services) — kicker charges in, the headline RISES letter-by-letter
+    // (each line masked with overflow:hidden), then the rows charge in from the left.
+    // splitChars wraps each <br> line in a clip mask and every glyph in an
+    // inline-block .nxChar, so GSAP can stagger them up from under the line.
+    function splitChars(el){
+      if(!el) return [];
+      var lines = el.innerHTML.split(/<br\s*\/?>/i), chars = [];
+      el.innerHTML = "";
+      lines.forEach(function(lineHTML){
+        var probe = document.createElement("span"); probe.innerHTML = lineHTML;
+        var text = probe.textContent;
+        var mask = document.createElement("span");
+        mask.style.cssText = "display:block;overflow:hidden;padding:.12em 0;margin:-.12em 0";
+        var inner = document.createElement("span");
+        inner.style.cssText = "display:inline-block;white-space:pre";
+        for(var i=0;i<text.length;i++){
+          var s = document.createElement("span");
+          s.className = "nxChar"; s.style.cssText = "display:inline-block";
+          if(text[i] === " "){ s.style.marginRight = ".14em"; }   // word gap (word-spacing can't reach split spaces)
+          s.textContent = text[i];
+          inner.appendChild(s); chars.push(s);
+        }
+        mask.appendChild(inner); el.appendChild(mask);
+      });
+      return chars;
+    }
+    var svcChars = splitChars(document.querySelector("#services .h-mega"));
     gsap.set("#services .sec__kicker", {opacity:0, x:-30});
-    gsap.set("#services .h-mega", {opacity:0, y:36, clipPath:"inset(0 0 100% 0)"});
+    gsap.set("#services .h-mega", {opacity:1});
+    gsap.set(svcChars, {yPercent:120});
     gsap.set("#services .svc__row", {opacity:0, x:-70});
+    gsap.set("#services .svc__close", {opacity:0, y:20});
     reveal("#services", gsap.timeline({paused:true})
       .to("#services .sec__kicker", {opacity:1, x:0, duration:.5, ease:"power2.out"})
-      .to("#services .h-mega", {opacity:1, y:0, clipPath:"inset(0 0 0% 0)", duration:.8, ease:"power3.out"}, "-=.2")
-      .to("#services .svc__row", {opacity:1, x:0, duration:.7, stagger:.12, ease:"power3.out"}, "-=.3")
+      .to(svcChars, {yPercent:0, duration:.9, stagger:.022, ease:"power4.out"}, "-=.25")
+      .to("#services .svc__row", {opacity:1, x:0, duration:.7, stagger:.12, ease:"power3.out"}, "-=.55")
+      .to("#services .svc__close", {opacity:1, y:0, duration:.6, ease:"power2.out"}, "-=.2")
     );
 
     // THE PROOF — heading wipes up, quotes slide in from the right.
@@ -967,6 +1128,7 @@ html.is-loading{overflow:hidden}
     gsap.set("#pricing .h-mega", {opacity:0, y:40});
     gsap.set("#pricing .toggle", {opacity:0, y:14});
     gsap.set("#pricing .tier", {opacity:0, y:46});
+    gsap.set("#pricing .pricing__terms", {opacity:0, y:16});
     gsap.set("#pricing .careplus", {opacity:0, y:20});
     gsap.set("#pricing .pricing__note", {opacity:0, y:16});
     reveal("#pricing", gsap.timeline({paused:true})
@@ -974,16 +1136,29 @@ html.is-loading{overflow:hidden}
       .to("#pricing .h-mega", {opacity:1, y:0, duration:.8, ease:"power3.out"}, "-=.2")
       .to("#pricing .toggle", {opacity:1, y:0, duration:.5, ease:"power2.out"}, "-=.3")
       .to("#pricing .tier", {opacity:1, y:0, duration:.65, stagger:.12, ease:"power3.out"}, "-=.1")
+      .to("#pricing .pricing__terms", {opacity:1, y:0, duration:.5, ease:"power2.out"}, "-=.15")
       .to("#pricing .careplus", {opacity:1, y:0, duration:.5, ease:"power2.out"}, "-=.2")
       .to("#pricing .pricing__note", {opacity:1, y:0, duration:.5, ease:"power2.out"}, "-=.3")
     );
 
+    // STRAIGHT ANSWERS — heading rises, each Q&A charges in from the left.
+    gsap.set("#answers .sec__kicker", {opacity:0, y:16});
+    gsap.set("#answers .h-mega", {opacity:0, y:40});
+    gsap.set("#answers .qa", {opacity:0, x:-40});
+    reveal("#answers", gsap.timeline({paused:true})
+      .to("#answers .sec__kicker", {opacity:1, y:0, duration:.5, ease:"power2.out"})
+      .to("#answers .h-mega", {opacity:1, y:0, duration:.8, ease:"power3.out"}, "-=.2")
+      .to("#answers .qa", {opacity:1, x:0, duration:.55, stagger:.14, ease:"power2.out"}, "-=.1")
+    );
+
     // THE ASK — LET'S BUILD wipes up bold, the circle button pops.
+    gsap.set("#contact .ask__eyebrow", {opacity:0, y:16});
     gsap.set("#contact .ask__big", {opacity:0, y:50, clipPath:"inset(0 0 100% 0)"});
     gsap.set("#contact .ask__circle", {opacity:0, scale:.6});
     gsap.set("#contact .ask__row", {opacity:0, y:24});
     reveal("#contact", gsap.timeline({paused:true})
-      .to("#contact .ask__big", {opacity:1, y:0, clipPath:"inset(0 0 0% 0)", duration:1, ease:"power4.out"})
+      .to("#contact .ask__eyebrow", {opacity:1, y:0, duration:.5, ease:"power2.out"})
+      .to("#contact .ask__big", {opacity:1, y:0, clipPath:"inset(0 0 0% 0)", duration:1, ease:"power4.out"}, "-=.2")
       .to("#contact .ask__circle", {opacity:1, scale:1, duration:.6, ease:"back.out(1.6)"}, "-=.5")
       .to("#contact .ask__row", {opacity:1, y:0, duration:.6, ease:"power2.out"}, "-=.4")
     );
@@ -1052,7 +1227,7 @@ html.is-loading{overflow:hidden}
 
     var rs = document.documentElement.style;
     var grey = THEMES.dead, orange = THEMES.orange, ck = ["bg","fg","accent","line"];
-    function paint(from,to,p){ for(var k=0;k<ck.length;k++){ rs.setProperty("--"+ck[k], gsap.utils.interpolate(from[ck[k]],to[ck[k]],p)); } }
+    function paint(from,to,p){ for(var k=0;k<ck.length;k++){ setRootVar("--"+ck[k], gsap.utils.interpolate(from[ck[k]],to[ck[k]],p)); } }
 
     // GPU grey layer for the pivot's orange<->grey<->orange. Topmost in the arc
     // stack, but only ever non-zero here (the section layers are still 0 this
@@ -1090,19 +1265,37 @@ html.is-loading{overflow:hidden}
       }
     });
 
-    // The problem settles in: quiet line, then the truth SLAMS.
+    // The problem settles in: quiet line, then the truth RISES — a smooth masked
+    // line reveal (each line lifts up from behind a clip) instead of the old
+    // scale-pop "slam", which read too snappy.
+    function splitLines(el){
+      if(!el) return [];
+      var lines = el.innerHTML.split(/<br\s*\/?>/i), inners = [];
+      el.innerHTML = "";
+      lines.forEach(function(html){
+        var mask = document.createElement("span");
+        mask.style.cssText = "display:block;overflow:hidden;padding:.16em 0;margin:-.16em 0";
+        var inner = document.createElement("span");
+        inner.style.cssText = "display:block";
+        inner.innerHTML = html;
+        mask.appendChild(inner); el.appendChild(mask); inners.push(inner);
+      });
+      return inners;
+    }
+    var probLines = splitLines(document.querySelector("#pivot .pivot__problem .pivot__heavy"));
     gsap.set("#pivot .pivot__eyebrow", {opacity:0, y:18});
     gsap.set("#pivot .pivot__thin", {opacity:0, y:24});
-    gsap.set("#pivot .pivot__problem .pivot__heavy", {opacity:0, scale:1.12, transformOrigin:"left top"});
+    gsap.set("#pivot .pivot__problem .pivot__heavy", {opacity:1});
+    gsap.set(probLines, {yPercent:118});
     gsap.set("#pivot .pivot__problem .pivot__sub", {opacity:0, y:22});
     ScrollTrigger.create({
       trigger:"#pivot", start:"top 55%", once:true,
       onEnter:function(){
-        gsap.timeline()
-          .to("#pivot .pivot__eyebrow", {opacity:1, y:0, duration:.5, ease:"power2.out"})
-          .to("#pivot .pivot__thin", {opacity:1, y:0, duration:.7, ease:"power2.out"}, "-=.3")
-          .to("#pivot .pivot__problem .pivot__heavy", {opacity:1, scale:1, duration:.42, ease:"power4.out"}, "+=.05")
-          .to("#pivot .pivot__problem .pivot__sub", {opacity:1, y:0, duration:.6, ease:"power2.out"}, "-=.1");
+        gsap.timeline({ defaults:{ ease:"power3.out" } })
+          .to("#pivot .pivot__eyebrow", {opacity:1, y:0, duration:.6})
+          .to("#pivot .pivot__thin", {opacity:1, y:0, duration:.85}, "-=.4")
+          .to(probLines, {yPercent:0, duration:1.1, stagger:.16}, "-=.4")   // smooth line-by-line rise (no snap)
+          .to("#pivot .pivot__problem .pivot__sub", {opacity:1, y:0, duration:.8}, "-=.55");
       }
     });
 
