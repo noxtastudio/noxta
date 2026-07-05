@@ -954,7 +954,7 @@ html.is-loading{overflow:hidden}
 
   /* Smooth scroll (Lenis) — eased, momentum scroll feel, synced to ScrollTrigger.
      Native scroll kept for reduced-motion + touch (Lenis leaves touch native). */
-  if(!reduce && window.Lenis){
+  if(!reduce && !isMobile && window.Lenis){
     var lenis = new Lenis({
       duration: 1.15,
       easing: function(t){ return Math.min(1, 1.001 - Math.pow(2, -10 * t)); },
@@ -1051,8 +1051,12 @@ html.is-loading{overflow:hidden}
     });
   }
 
-  /* 2) Entrance reveals — each beat gets its OWN motion that matches its job. */
-  if(reduce){
+  /* 2) Entrance reveals — each beat gets its OWN motion that matches its job.
+        Mobile joins reduced-motion here: reveal everything statically and DON'T
+        build the per-section ScrollTriggers. Their initial measurement (a forced
+        reflow inside ScrollTrigger.enable) was ~142ms of the mobile TBT, and the
+        heavy scroll effects are already off on mobile — so this is pure win. */
+  if(reduce || isMobile){
     document.querySelectorAll(".reveal").forEach(function(el){ el.style.opacity = 1; });
   } else {
     // play forward on the way down, reverse on the way up
